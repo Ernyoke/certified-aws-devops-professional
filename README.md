@@ -9,3 +9,5 @@
     - [CodeStart](1-sdlc-automation/codestar.md)
     - [Jenkins on AWS](1-sdlc-automation/jenkins.md)
     - [SDLC Whitepapers](1-sdlc-automation/whitepapers.md)
+2. Configuration Management and Infrastructure as Code
+    - [CloudFormation](2-infrastructure-as-code/cloudformation.md)
