@@ -8,3 +8,4 @@
     - [CodePipeline](1-sdlc-automation/codepipeline.md)
     - [CodeStart](1-sdlc-automation/codestar.md)
     - [Jenkins on AWS](1-sdlc-automation/jenkins.md)
+    - [SDLC Whitepapers](1-sdlc-automation/whitepapers.md)
