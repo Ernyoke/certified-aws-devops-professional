@@ -66,3 +66,19 @@
 ## CodePipeline Integration with AWS Lambda
 
 - Reference: [https://docs.aws.amazon.com/codepipeline/latest/userguide/actions-invoke-lambda-function.html](https://docs.aws.amazon.com/codepipeline/latest/userguide/actions-invoke-lambda-function.html)
+
+## Deploy CloudFormation Templates
+
+- CodePipeline can deploy CloudFormation templates as well
+- CodePipeline actions for CloudFormation:
+    - Create or update stack
+    - Delete stack
+    - Replace a failed stack
+    - Create or replace change set
+    - Execute change set
+- Capabilities: used to allow whether we want to allow CloudFormation to create IAM resources on our behalf. Capability options:
+    - `CAPABILITY_IAM`
+    - `CAPABILITY_NAMED_IAM`
+    - `CAPABILITY_AUTO_EXPAND`: used for nested stacks
+- Create CodePipeline with CloudFormation: [https://docs.aws.amazon.com/codepipeline/latest/userguide/tutorials-cloudformation.html](https://docs.aws.amazon.com/codepipeline/latest/userguide/tutorials-cloudformation.html)
+- CodePipeline-Nested-CFN: [https://github.com/aws-samples/codepipeline-nested-cfn](https://github.com/aws-samples/codepipeline-nested-cfn)
