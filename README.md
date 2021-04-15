@@ -7,3 +7,4 @@
     - [CodeDeploy](1-sdlc-automation/codedeploy.md)
     - [CodePipeline](1-sdlc-automation/codepipeline.md)
     - [CodeStart](1-sdlc-automation/codestar.md)
+    - [Jenkins on AWS](1-sdlc-automation/jenkins.md)
