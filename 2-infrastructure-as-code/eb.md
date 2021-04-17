@@ -250,4 +250,17 @@
 ## Rebuild an Environment
 
 - EB will delete the old environment and will recreate everything
-- THis will remove and recreate resources as well 
+- THis will remove and recreate resources as well
+
+## Worker Environments
+
+- Used for offloading long running workloads, example processing videos, processing cron jobs, etc.
+- It uses SQS queues under the hood for being able to queue upcoming tasks
+- Worker environments polls the SQS queue for more work, in case of failure, the task is passed onto the DLQ
+- `cron.yml`: configuration file for the worker environment for being able to create cron jobs
+
+## Multi-container Docker Environments
+
+- Uses ECS cluster under the hood
+- `Dockerrun.aws.json`: EB specific json file describing how to deploy a set of Docker containers as an Elastic Beanstalk application
+- Reference: [https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/create_deploy_docker_ecs.html](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/create_deploy_docker_ecs.html)
