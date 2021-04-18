@@ -12,3 +12,4 @@
 2. Configuration Management and Infrastructure as Code
     - [CloudFormation](2-infrastructure-as-code/cloudformation.md)
     - [Elastic Beanstalk](2-infrastructure-as-code/eb.md)
+    - [AWS Lambda](2-infrastructure-as-code/lambda.md)
