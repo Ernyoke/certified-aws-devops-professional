@@ -1,4 +1,4 @@
-# AWS Lambda Functions
+# Serverless - AWS Lambda Functions, Step Functions and API Gateway
 
 ## Serverless Introduction
 
@@ -108,3 +108,90 @@
 - Aliases enable Blue/Green deployments by assigning weights to Lambda functions
 - Aliases enable stable configuration of our event triggers/destinations
 - Aliases have their own ARNs
+
+
+## SAM - Serverless Application Model
+
+1. Download a sample application
+
+    ```
+    sam init --runtime java11
+    ```
+
+2. Build the application
+
+    ```
+    sam build
+    ```
+
+3. Invoke function locally
+
+    ```
+    sam local invoke <function-name> -e event.json
+    sam local start-api
+    ```
+
+4. Package the application
+
+    ```
+    sam package --output-template packaged.yaml --s3-bucket <bucket-name> --region us-east-2 --profile aws-devops
+    ```
+
+5. Deploy the application
+
+    ```
+    sam deploy --template-file packaged.yaml --capabilities CAPABILITY_IAM --stack-name <stack-name> --region us-east-2 --profile aws-devops
+    ```
+
+- SAM has builtin support for CodeDeploy
+- SAM can do the following things when deploying:
+    - Deploy the new version and automatically create aliases that point to the new version
+    - Gradually shift customer traffic to the new version until we are satisfied that the function works as expected
+    - We can define pre-traffic and post-traffic test functions to verify than the newly deployed code is configured correctly
+    - SAM can roll back the deployment if CloudWatch alarms are triggered
+
+## AWS Step Functions
+
+- Step Functions allow to build visual workflows which are used to orchestrate Lambda Functions
+- Workflow is represented as a JSON state machine
+- Features:
+    - Sequence
+    - Parallel execution
+    - Conditions
+    - Timeouts
+    - Error handling
+- Can also integrate with EC2, ECS, on premise servers, API Gateway
+- Maximum execution time is 1 year
+- Possibility to implement human approval feature
+- Use cases:
+    - Order fulfillment
+    - Data processing
+    - Web applications
+    - Any workflow
+- When designing a Step Function we get an aspect of visualization (flow diagram)
+- The execution can be visually represented on this diagram
+- Any state can encounter errors:
+    - State machine definition issues (example. no matching rules in choice state)
+    - Task failures (example: an exception in a Lambda function)
+    - Transient failures (example: network partition events)
+- By default: when a state reports an error, the execution of the Step Functions fails entirely
+- Failures can be retried:
+    - Exponential back-off: *IntervalSeconds*, *MaxAttempts*, *BackoffRate*
+    - Move on - Catch: *ErrorEquals*, *Next*
+- Best practice: include data in the error message
+
+## Standard vs Express Step Functions
+
+- Standard Function
+    - Maximum duration: 1 year
+    - Exactly-one workflow execution
+    - Execution start rate: 2000 per second
+    - Price per state transition: more expensive in general
+- Express Function 
+    - Maximum duration: 5 minutes
+    - At-least-once workflow execution
+    - Execution start rate: 100_000 per second
+
+## Step Function Use Cases
+
+- Reference: [https://aws.amazon.com/step-functions/use-cases/](https://aws.amazon.com/step-functions/use-cases/)
