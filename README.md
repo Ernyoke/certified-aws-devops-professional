@@ -12,4 +12,4 @@
 2. Configuration Management and Infrastructure as Code
     - [CloudFormation](2-infrastructure-as-code/cloudformation.md)
     - [Elastic Beanstalk](2-infrastructure-as-code/eb.md)
-    - [erverless - AWS Lambda Functions, Step Functions and API Gateway](2-infrastructure-as-code/serverless.md)
+    - [Serverless - AWS Lambda Functions, Step Functions and API Gateway](2-infrastructure-as-code/serverless.md)
