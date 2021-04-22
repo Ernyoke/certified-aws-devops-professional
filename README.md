@@ -14,3 +14,4 @@
     - [Elastic Beanstalk](2-infrastructure-as-code/eb.md)
     - [Serverless - AWS Lambda Functions, Step Functions and API Gateway](2-infrastructure-as-code/serverless.md)
     - [ECS - Elastic Container System](2-infrastructure-as-code/ecs.md)
+    - [AWS OpsWorks](2-infrastructure-as-code/opsworks.md)
