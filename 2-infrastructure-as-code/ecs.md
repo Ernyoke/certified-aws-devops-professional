@@ -36,3 +36,45 @@
 - Pull an image from ECR:
     - Login with the same command above
     - Pull the image: `docker pull 1234:dkr.ecr.eu-west-1.amazonaws.com/demo:latest`
+
+## Fargate
+
+- It is a serverless service for running containers in the cloud
+- We just have to create task definitions and AWS will run our containers
+
+## Elastic Beanstalk + ECS
+
+- We can run Elastic Beanstalk in single and multi Docker container mode
+- Multi Docker helps run multiple containers per EC2 instance in EB
+- EB multi container mode will create:
+    - ECS cluster
+    - EC2 instances, configured to use the ECS cluster
+    - Load Balancer (in high availability mode)
+    - Task definitions and execution
+- Requires a config file named **Dockerrun.aws.json** which has to be placed a the root of the source code
+
+## ECS - IAM Roles
+
+- EC2 instance: needs an EC2 service policy for being able to interact with ECS. The policy attached is usually the one managed by AWS named `AmazonEC2ContainerServiceEC2Role`
+- Task definitions can have a task role, which provides the Docker container tasks to interact with other AWS services
+
+## ECS - Auto Scaling
+
+- Service Auto Scaling (optional): we can configure the minimum number of tasks, maximum number of tasks and the desired number of task. It is similar to EC2 auto scaling
+- Scaling policies:
+    - Target tracking
+    - Step scaling: requires alarms to increase and decrease the number of tasks
+
+## ECS - Integration with CloudWatch
+
+- For a task definition we can define a log drive at task creation
+- With a log driver we can integrate the task logs with CloudWatch Logs
+- For the log driver we can select the log group, log stream prefix and the AWS region
+- There is no CloudWatch agent required to be installed for ECS
+- **CloudWatch Container Insights**: sends per container metrics to CloudWatch. It collects, aggregates and summarizes compute utilization such as CPU, memory, disk, networking information
+
+## ECS CI/CD Pipeline
+
+- Reference tutorials: 
+    - [https://ecsworkshop.com/](https://ecsworkshop.com/)
+    - [https://docs.aws.amazon.com/codepipeline/latest/userguide/ecs-cd-pipeline.html](https://docs.aws.amazon.com/codepipeline/latest/userguide/ecs-cd-pipeline.html)
