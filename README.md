@@ -17,3 +17,5 @@
     - [AWS OpsWorks](2-infrastructure-as-code/opsworks.md)
 3. Monitoring and Logging
     - [CloudTrail](3-monitoring/cloudtrail.md)
+4. Policies and Standards Automation
+    - [SSM - AWS Systems Manager](4-automation/ssm.dm) 
