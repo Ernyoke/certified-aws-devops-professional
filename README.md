@@ -20,3 +20,4 @@
 4. Policies and Standards Automation
     - [SSM - AWS Systems Manager](4-automation/ssm.dm)
     - [AWS Config](4-automation/config.md)
+    - [AWS Service Catalog](4-automation/service-catalog.md)
