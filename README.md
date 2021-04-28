@@ -27,3 +27,4 @@
     - [Trusted Advisor](4-automation/trusted-advisor.md)
     - [GuardDuty](4-automation/guard-duty.md)
     - [Amazon Macie](4-automation/macie.md)
+    - [Secrets and License Manager](4-automation/manager.md)
