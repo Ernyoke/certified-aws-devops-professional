@@ -26,3 +26,4 @@
     - [Health](4-automation/health.md)
     - [Trusted Advisor](4-automation/trusted-advisor.md)
     - [GuardDuty](4-automation/guard-duty.md)
+    - [Amazon Macie](4-automation/macie.md)
