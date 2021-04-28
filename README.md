@@ -24,3 +24,4 @@
     - [Amazon Inspector](4-automation/inspector.md)
     - [EC2 Instance Compliance](4-automation/ec2-instance-compliance.md)
     - [Health](4-automation/health.md)
+    - [Trusted Advisor](4-automation/trusted-advisor.md)
