@@ -28,3 +28,4 @@
     - [GuardDuty](4-automation/guard-duty.md)
     - [Amazon Macie](4-automation/macie.md)
     - [Secrets and License Manager](4-automation/manager.md)
+    - [Cost Allocation Tags](4-automation/cost-allocation-tags.md)
