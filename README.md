@@ -29,3 +29,4 @@
     - [Amazon Macie](4-automation/macie.md)
     - [Secrets and License Manager](4-automation/manager.md)
     - [Cost Allocation Tags](4-automation/cost-allocation-tags.md)
+    - [AWS Data Protection](4-automation/data-protection.md)
