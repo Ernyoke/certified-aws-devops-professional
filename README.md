@@ -30,3 +30,5 @@
     - [Secrets and License Manager](4-automation/manager.md)
     - [Cost Allocation Tags](4-automation/cost-allocation-tags.md)
     - [AWS Data Protection](4-automation/data-protection.md)
+5. High Availability, Fault Tolerance and Disaster Recovery
+    - [Auto Scaling Groups](5-fault-tolerance/asg.md)
