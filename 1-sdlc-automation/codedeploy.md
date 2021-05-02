@@ -84,7 +84,6 @@
 - They are internal to CodeDeploy, while alarms are CloudWatch specific
 - Trigger integrate directly to AWS SNS
 
-
 ## Rollbacks
 
 - Manual rollbacks: 
@@ -97,6 +96,13 @@
         - Roll back when a deployment fails
         - Roll back when alarm threshold is met: for example if the CPU hits a threshold after a successful deployment, we can set an automatic rollback for it
     - Alarms can be set to be ignored during deployment
+
+## Retain Manually Added Files
+
+- As part of the deployment process, the CodeDeploy agent removes from each instance all the files installed by the most recent deployment. If files that weren't part of a previous deployment appear in target deployment locations, we can choose what CodeDeploy does with them during the next deployment:
+    - **Fail the deployment**: an error is reported and the deployment status is changed to Failed
+    - **Overwrite the content**: the version of the file from the application revision replaces the version already on the instance
+    - **Retain the content**: the file in the target location is kept and the version in the application revision is not copied to the instance
 
 ## CodeDeploy with On-Premise Instances
 
