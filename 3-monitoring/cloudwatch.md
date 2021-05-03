@@ -77,5 +77,5 @@
 - `GetMetricStatistics` API:
 
     ```
-    aws cloudwatch get-metric-statistics --namespace <namespace>  --metric-name <metric name> --dimentsions=<dimensions> --statistics Maximum --start-time 2019-08-10T00:00:00 --end-time <end-time> --period <period> --profile <profile> --region <region>
+    aws cloudwatch get-metric-statistics --namespace <namespace>  --metric-name <metric name> --dimensions=<dimensions> --statistics Maximum --start-time 2019-08-10T00:00:00 --end-time <end-time> --period <period> --profile <profile> --region <region>
     ```
