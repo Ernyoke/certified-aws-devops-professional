@@ -18,6 +18,7 @@
 3. Monitoring and Logging
     - [CloudTrail](3-monitoring/cloudtrail.md)
     - [AWS Kinesis](3-monitoring/kinesis.md)
+    - [CloudWatch](3-monitoring/cloudwatch.md)
 4. Policies and Standards Automation
     - [SSM - AWS Systems Manager](4-automation/ssm.dm)
     - [AWS Config](4-automation/config.md)
