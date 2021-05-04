@@ -79,3 +79,33 @@
     ```
     aws cloudwatch get-metric-statistics --namespace <namespace>  --metric-name <metric name> --dimensions=<dimensions> --statistics Maximum --start-time 2019-08-10T00:00:00 --end-time <end-time> --period <period> --profile <profile> --region <region>
     ```
+
+## CloudWatch Alarms
+
+- Alarms are used to trigger notifications for any metric
+- Alarms can go to Auto Scaling, EC2 actions, SNS notifications
+- Different ways of computing alarms: sampling, percentage max, min, etc.
+- Alarm states:
+    - OK
+    - INSUFFICIENT_DATA
+    - ALARM
+- Period:
+    - Length of time in seconds to evaluate the metric
+    - High resolution custom metrics: we can only choose between 10 or 30 second
+- Targets:
+    - Stop, terminate, reboot or recover EC2 instances
+    - Trigger auto scaling actions
+    - Send notifications to SNS
+- Alarms can be created based in CloudWatch Logs metrics filter
+- CloudWatch does not test or validate the actions that are assigned
+- In order to test an alarm, we can use the following command:
+
+    ```
+    aws cloudwatch set-alarm-state --alarm-name "name" --state-values ALARM --state-reason "testing"
+    ```
+
+## Billing Alarms
+
+- We can create an alarm based on spending
+- We can send notifications to SNS topics if the billing alarms is triggered
+- We can create billing alarms for specific service
