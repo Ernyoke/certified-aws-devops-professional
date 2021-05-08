@@ -94,3 +94,59 @@ Slow start duration: in target group we can set a duration period during which t
     ```
     aws autoscaling complete-lifecycle-action --lifecycle-action-result CONTINUE --lifecycle-hook-name LaunchHook --auto-scaling-group-name demo-asg --instance-id i-xxxx -region <region> --profile <profile>
     ```
+
+## ASG Termination Policies
+
+- Reference: [https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html](https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html)
+- With termination policies we can control which instances are terminated first in case of a scale-in event
+- Default termination policy: detects which AZ has the most instances with at least on instance which does not have termination protection. Within an AZ the default termination policy behavior is the following:
+    1. Determine which instances to terminate first based on allocation strategy in case of mixed instance types (on-demand, spot)
+    2. Determine whether any of the instances use the oldest launch template/launch configuration
+    3. If there are multiple instances with the latest launch configuration, terminate the one with is the closes to the next billing hour. If there are multiple of this, terminate on at random
+- Custom termination policies:
+    - Default: (presented above)
+    - AllocationStrategy: terminate instances to align the remaining ones to the allocation strategy
+    - OldestLaunchTemplate: terminate instances which use an older launch configuration
+    - ClosestToNextInstanceHour
+    - NewestInstance
+    - OldestInstance
+
+## ASG Integration with SQS
+
+- Reference: [https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-using-sqs-queue.html](https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-using-sqs-queue.html)
+- `ApproximateNumberOfMessagesVisible`: the number of messages in the queue
+- We can create a custom metric which takes in consideration the number of messages in the queue, the number of currently running instances in the ASG and the processing time for a message from the queue. We can compute the number of instances required based on the accepted latency, example:
+
+    ```
+    ApproximateNumberOfMessages = 1500
+    running capacity = 10
+    processing time per message = 0.1 seconds
+    acceptable latency = 10 seconds
+
+    1500 / 10 = 150 * 0.1 = 15 - we need 15 instances to process the messages
+    ```
+
+- Scale In protection: we should protect our instances from scale in, in case there are processing a message, we would not want the instance to be terminated
+
+## ASG ASG CloudFormation Creation Policy
+
+- `CreationPolicy`: we can assign a creation policy in order to notify CloudFormation if the instances from an ASG were created successfully
+- We can attach a timeout to the creation policy
+
+## ASG CloudFormation Update Policy
+
+- `UpdatePolicy` attribute: specified how CloudFormation handles updates:
+    - `AutoScalingReplacingUpdate`: specify whether CloudFormation replaces an Auto Scaling group with a new one or replaces only the instances in the Auto Scaling group
+        - `WillReplace`: specifies whether an Auto Scaling group and the instances it contains are replaced during an update. During replacement, CloudFormation retains the old group until it finishes creating the new one. If the update fails, CloudFormation can roll back to the old Auto Scaling group and delete the new Auto Scaling group
+    - `AutoScalingRollingUpdate`: rolling updates enable us to specify whether AWS CloudFormation updates instances that are in an Auto Scaling group in batches or all at once
+    - If both the `AutoScalingReplacingUpdate` and `AutoScalingRollingUpdate` policies are specified, setting the `WillReplace` property to `true` gives `AutoScalingReplacingUpdate` precedence
+    - `AutoScalingScheduledAction`: prevent scheduled actions from modifying min/max/desired capacity for CloudFormation
+
+## ASG CodeDeploy Integration
+
+- CodeDeploy deployment to ASG: Whenever a new instance from an ASG is coming up, CodeDeploy will automatically deploy the application to it
+- Scale-up events during deployment: if a scaling event happens during a deployment, the created instances will have the most recently deployed revision, not the currently deploying revision of the application
+- Solution for this issue:
+    - Redeploy the application
+    - Suspend Launch process during deployment
+Reference: [https://docs.aws.amazon.com/codedeploy/latest/userguide/integrations-aws-auto-scaling.html](https://docs.aws.amazon.com/codedeploy/latest/userguide/integrations-aws-auto-scaling.html)
