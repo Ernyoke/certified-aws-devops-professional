@@ -379,7 +379,6 @@
     - List all objects with certain attributes
     - Find all objects uploaded within a date range
 
-
 ## DynamoDB Security & Other Features
 
 - Security:
