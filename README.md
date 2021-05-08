@@ -38,3 +38,4 @@
 5. High Availability, Fault Tolerance and Disaster Recovery
     - [Auto Scaling Groups](5-fault-tolerance/asg.md)
     - [DynamoDB](5-fault-tolerance/dynamodb.md)
+    - [Amazon S3](5-fault-tolerance/s3.md)
