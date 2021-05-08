@@ -271,7 +271,7 @@
         - --starting-token: specify the last received *NextToken* to keep reading data from the next page
 - CLI Examples:
     - Scan:
-    
+
     ```
     aws dynamodb scan --table-name blog-posts --projection-expression "post_id, content" --region us-east-2
     ```
@@ -349,6 +349,37 @@
     - Option 2: create a back-up, restore it into a new table
     - Option 3: Scan + Write
 
+## DynamoDB Backups
+
+- **On-demand backups**:
+    - We can use the DynamoDB on-demand backup capability to create full backups of our tables for long-term retention and archival for regulatory compliance needs
+    - The on-demand backup and restore process scales without degrading the performance or availability of the applications
+    - We can create backups that are consistent within seconds across thousands of partitions without worrying about schedules or long-running backup processes
+- **Point-in-Time Recovery**:
+    - Point-in-time recovery helps protect our DynamoDB tables from accidental write or delete operations
+    - Has to be enabled by AWS console, CLI, or with DynamoDB API. Provides continuous backups until we explicitly turn it off
+    - With point-in-time recovery, we don't have to worry about creating, maintaining, or scheduling on-demand backups
+    - With point-in-time recovery, we can restore that table to any point in time during the last 35 days
+
+## DynamoDB Global Tables
+
+- Enable cross-region replication of a DynamoDB table
+- Require DynamoDB streams to be enabled in order to work
+- Multi-region, reads can happen in each replication
+- Data replication is eventually consistent
+- Transactional operations provide atomicity, consistency, isolation, and durability (ACID) guarantees only within the region where the write is made originally
+- Transactions are not supported across regions in global tables
+
+## S3 Metadata Index
+
+- Write objects to S3 -> write events trigger a Lambda function -> the function writes the object metadata into DynamoDB table
+- Use case: API for object metadata:
+    - Search by date
+    - Total storage used by consumer
+    - List all objects with certain attributes
+    - Find all objects uploaded within a date range
+
+
 ## DynamoDB Security & Other Features
 
 - Security:
@@ -356,11 +387,6 @@
     - Access fully controlled by IAM
     - Encryption at rest using KMS
     - Encryption in transit using SSL/TLS
-- Backup/Restore:
-    - Point in time restore la RDS
-    - No performance impact
-- Global Table:
-    - Multi region, fully replicated, high performance
 - Amazon DMS:
     - Used to migrate data from Mongo, Oracle, MySQL, S3 to DynamoDB
 - Local DynamoDB for development
