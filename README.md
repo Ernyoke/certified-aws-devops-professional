@@ -37,3 +37,4 @@
     - [AWS Data Protection](4-automation/data-protection.md)
 5. High Availability, Fault Tolerance and Disaster Recovery
     - [Auto Scaling Groups](5-fault-tolerance/asg.md)
+    - [DynamoDB](5-fault-tolerance/dynamodb.md)
