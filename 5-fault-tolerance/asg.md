@@ -150,3 +150,10 @@ Slow start duration: in target group we can set a duration period during which t
     - Redeploy the application
     - Suspend Launch process during deployment
 Reference: [https://docs.aws.amazon.com/codedeploy/latest/userguide/integrations-aws-auto-scaling.html](https://docs.aws.amazon.com/codedeploy/latest/userguide/integrations-aws-auto-scaling.html)
+
+## ASG Deployment Strategies
+
+- In place (one LB, one target group one ASG): instance state is mutate
+- Rolling (one LB, one TG, one ASG, new instances): new instances are created with the newer version
+- Replace (one LB, one TG, two ASG, new instances): new ASG is created with a new target group and new instances
+- Blue/Green (tow LB, two TG, two ASG, new instances, R53)
