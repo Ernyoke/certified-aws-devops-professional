@@ -10,6 +10,12 @@
     - Example of stages: Build, Test, Deploy, LoadTest
     - Stages can have manual approval steps
 
+## CodePipeline Concepts
+
+- **Pipeline**: is a workflow construct that describes how software changes go through a release process. Each pipeline is made up of a series of stages
+- **Stage**:  is a logical unit we can use to isolate an environment and to limit the number of concurrent changes in that environment. Each stage contains actions that are performed on the application artifacts
+- **Action**: is a set of operations performed on application code and configured so that the actions run in the pipeline at a specified point. Valid CodePipeline action types are source, build, test, deploy, approval, and invoke
+
 ## CodePipeline Artifacts
 
 - Each pipeline stage can create artifacts
@@ -24,7 +30,6 @@
 - It is an action group which requires a manual approval for somebody
 - We can send a notification to a SNS topic in case of a manual approval
 
-
 ## Stage Actions
 
 - Stage actions can be parallel and sequential
@@ -33,7 +38,6 @@
     - Stages can be defined with the `runOrder` value
     - `runOrder` is an integer, stage group with lesser value are executed first
     - Parallel actions have the same `runOrder`
-
 
 ## CodePipeline Use Cases
 
