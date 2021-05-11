@@ -40,3 +40,4 @@
     - [DynamoDB](5-fault-tolerance/dynamodb.md)
     - [Amazon S3](5-fault-tolerance/s3.md)
     - [Multi AZ and Multi Region in AWS](5-fault-tolerance/multi-az-region.md)
+    - [Disaster Recovery](5-fault-tolerance/disaster-recovery.md)
