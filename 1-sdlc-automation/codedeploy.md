@@ -42,20 +42,20 @@
 - Documentation [https://docs.aws.amazon.com/codedeploy/latest/userguide/reference-appspec-file.html](https://docs.aws.amazon.com/codedeploy/latest/userguide/reference-appspec-file.html
 )
 - Deployment hooks (lifecycle events):
-    - ApplicationStop: occurs before the new revision of the application is downloaded. Use for defining a script which gracefully stops the application
-    - DownloadBundle: downloads the current application revision from S3 and copies the revision to a temporary location. This event is reserved for CodeDeploy agent and can not be used to run scripts
-    - BeforeInstall: runs before install script
-    - Install: during this event, the CodeDeploy agent copies the revision files from the temporary location to the final destination folder. This event is reserved for CodeDeploy agent and can not be used to run scripts
-    - AfterInstall: runs after install lifecycle event finished. This event can be used for tasks such as configuration or changing file permissions
-    - ApplicationStart: this event can be used to restart the application stopped during ApplicationStop event
-    - ValidateService: last deployment event. Can be used to validate if the deployment was successful
+    - **ApplicationStop**: occurs before the new revision of the application is downloaded. Use for defining a script which gracefully stops the application
+    - **DownloadBundle**: downloads the current application revision from S3 and copies the revision to a temporary location. This event is reserved for CodeDeploy agent and can not be used to run scripts
+    - **BeforeInstall**: runs before install script
+    - **Install**: during this event, the CodeDeploy agent copies the revision files from the temporary location to the final destination folder. This event is reserved for CodeDeploy agent and can not be used to run scripts
+    - **AfterInstall**: runs after install lifecycle event finished. This event can be used for tasks such as configuration or changing file permissions
+    - **ApplicationStart**: this event can be used to restart the application stopped during ApplicationStop event
+    - **ValidateService**: last deployment event. Can be used to validate if the deployment was successful
 - In case we have load balancer, we can have the following additional hooks:
-    - BeforeBlockTraffic
-    - BlockTraffic
-    - AfterBlockTraffic
-    - BeforeAllowTraffic
-    - AllowTraffic
-    - AfterAllowTraffic
+    - **BeforeBlockTraffic**
+    - **BlockTraffic**
+    - **AfterBlockTraffic**
+    - **BeforeAllowTraffic**
+    - **AllowTraffic**
+    - **AfterAllowTraffic**
 - Hook which can execute scripts can have the following properties:
     - `timeout`: specifies the max running duration for the script
     - `runas`: specifies the user which would be used to execute the script (example: `root`)
@@ -72,11 +72,9 @@
     - Pass CodeDeploy events to Kinesis Streams
     - Use CloudWatch alarms to automatically stop, terminate, reboot or recover Amazon EC2 instances when a deployment event occurs
 
-
 ## CloudWatch Logs
 
 - In order to send the CodeDeploy logs to CloudWatch, we have to install the CloudWatch log agent on the specific machines
-
 
 ## CodeDeploy Triggers
 
