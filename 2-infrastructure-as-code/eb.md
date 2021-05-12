@@ -12,7 +12,7 @@
   - ELB
   - RDS
   - Etc..
-- Elastic Beanstalk is free but you pay for the underlying instances
+- Elastic Beanstalk is free but we pay for the underlying instances
 - Three architecture models:
   - Single instance deployment: good for developers
   - LB + ASG: great for production or staging web applications
@@ -21,7 +21,7 @@
   - Application
   - Application Version (Each deployment gets assigned a version)
   - Environment name (dev, staging, prod): free naming
-- You deploy application versions to environments and can promote application versions to the next environment
+- We deploy application versions to environments and can promote application versions to the next environment
 - Rollback feature to previous application versions
 - Full control over the lifecycle of environments
 - Support for many platforms:
@@ -33,7 +33,7 @@
   - Single Container Docker
   - Multi Container Docker
   - Pre-configure Docker
-  - Write your own custom platforms (If the any of the above is not supported)
+  - Write our own custom platforms (If the any of the above is not supported)
 
 ## Elastic Beanstalk Deployment modes
 
@@ -49,26 +49,11 @@
 
 - This is not a direct feature of Elastic Beanstalk
 - Zero downtime and release facility
-- Create a new staging environment and deploy your newest version there
+- Create a new staging environment and deploy our newest version there
 - The new environment (green) can be validated independently and roll back if there's issues
 - Route 53 can be setup using weighted policies to redirect a little bit of traffic to the staging environment
-- Using the elastic beanstalk console, you can "swap URLs" when with the testing environment
+- Using the elastic beanstalk console, we can "swap URLs" when with the testing environment
 - This is a manual feature, it's not directly embedded in EB
-
-## Elastic Beanstalk CLI
-
-- We can install an additional CLI called the “EB cli” which makes working with Beanstalk from the CLI easier
-- Basic commands are:
-  - eb create
-  - eb status
-  - eb health
-  - eb events
-  - eb logs
-  - eb open
-  - eb deploy
-  - eb config
-  - eb terminate
-- It’s helpful for your automated deployment pipelines!
 
 ## Elastic Beanstalk Lifecycle Policy
 
@@ -93,7 +78,7 @@
   - Able to modify some default settings using: option_settings
   - Ability to add resources such as RDS, ElastiCache, DynamoDB, etc...
 - Resources managed by .ebextensions get deleted if the environment goes away
-- The .ebextensions folder goes to the root of your project
+- The .ebextensions folder goes to the root of our project
 
 ## Elastic Beanstalk Under the Hood
 
@@ -250,7 +235,7 @@
 ## Rebuild an Environment
 
 - EB will delete the old environment and will recreate everything
-- THis will remove and recreate resources as well
+- This will remove and recreate resources as well
 
 ## Worker Environments
 
