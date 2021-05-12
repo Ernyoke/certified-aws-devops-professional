@@ -178,8 +178,9 @@
 ## CloudFormation Rollbacks
 
 - Stack creation fails:
-    - Default: everything rolls back, stack will be deleted
-    - We can disable the rollback in order to troubleshoot what happened
+    - Default: everything rolls back, stack will be deleted (`OnFailure=ROLLBACK`)
+    - We can disable the rollback in order to troubleshoot what happened (`OnFailure=DO_NOTHING`)
+    - If we want to get rid of the whole stack on failure, we can set `OnFailure=DELETE`
 - Stack update fails:
     - The stack automatically rolls back to the previous known working state
     - We can see the in the logs what happened and what are the error messages
@@ -190,10 +191,10 @@
 - Nested stacks are considered to be best practice
 - To update a nested stack, alway update the parent (root stack)
 
-## Change Sets
+## ChangeSets
 
 - When we update a stack, we need to know what will change before the changes themselves are applied
-- Change sets wont sya if the update will be successful
+- Change sets wont say if the update will be successful
 
 ## Retain Data on Delete
 
@@ -210,3 +211,36 @@
 ## Termination Protection
 
 - To prevent accidental deletes on CloudFormation templates, we have to use Termination Protection
+
+## SSM Parameters
+
+- Type of parameter: `AWS::SSM:Parameter::Value< String >`
+- Parameter will be fetched from the path specified by `Default` key
+- In parameters tab in CloudFormation we can see a resolved value for the SSM parameters
+- AWS provides some default public SSM parameters which can be referenced (example: latest EC2 AMI)
+
+## CloudFormation - `DependsOn`
+
+- It is a way to define a specific resource should be created after another one was already created
+
+## Deploying Lambda Functions using CloudFormation
+
+- Inline: we can define the Lambda code inside the CF template
+    - The code for the Lambda function should be defined under `Code ZipFile` key which should specify that its content is a multi line content (use the pipe operator for this `|`)
+    - Restrictions: 
+        - Code should be limited in length 
+        - We can not have dependencies
+- Zip: we can zip the function and its dependencies and upload the archive into an S3 bucket
+    - The code for the lambda can be references under `Code S3Bucket` tag
+    - We have to specify the bucket and location for the zip in S3
+    - We can also reference the version of the archive by `S3ObjectVersion`
+
+## Custom Resources
+
+- We can define custom resources to address any of the following use cases:
+    - An AWS resource is not yet covered (new service for example)
+    - Track an on-premise resource
+    - Empty an S3 bucket
+    - Fetch an AMI id (the old way)
+- Custom resources are Lambda function which will be invoked at every create, update or delete event
+- There will be an event passed to the Lambda which contains the request type (create, update, delete) and the response url (the url for callback from the function). We can also pass some parameters as resource properties (key-value pairs) to the Lambda
