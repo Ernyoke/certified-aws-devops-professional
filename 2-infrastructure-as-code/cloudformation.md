@@ -244,3 +244,47 @@
     - Fetch an AMI id (the old way)
 - Custom resources are Lambda function which will be invoked at every create, update or delete event
 - There will be an event passed to the Lambda which contains the request type (create, update, delete) and the response url (the url for callback from the function). We can also pass some parameters as resource properties (key-value pairs) to the Lambda
+
+## Drift Detection
+
+- Drift detection operation on a stack determines whether the stack has drifted from its expected template configuration
+- Returns detailed information about the drift status of each resource in the stack that supports drift detection
+
+## Status Codes
+
+- `CREATE_COMPLETE`: Successful creation of one or more stacks
+- `CREATE_IN_PROGRESS`: Ongoing creation of one or more stacks
+- `CREATE_FAILED`: Unsuccessful creation of one or more stacks. Possible reasons for a failed creation include insufficient permissions to work with all resources in the stack, parameter values rejected by an AWS service, or a timeout during resource creation
+- `DELETE_COMPLETE`
+- `DELETE_FAILED`
+- `DELETE_IN_PROGRESS`
+- `REVIEW_IN_PROGRESS`: Ongoing creation of one or more stacks with an expected `StackId` but without any templates or resources
+- `ROLLBACK_COMPLETE`: Successful removal of one or more stacks after a failed stack creation or after an explicitly canceled stack creation. Any resources that were created during the create stack operation are deleted
+- `UPDATE_COMPLETE`: Successful update of one or more stacks
+- `UPDATE_COMPLETE_CLEANUP_IN_PROGRESS`: Ongoing removal of old resources for one or more stacks after a successful stack update
+- `UPDATE_ROLLBACK_FAILED`: Unsuccessful return of one or more stacks to a previous working state after a failed stack update. When in this state, we can delete the stack or continue rollback. We might need to fix errors before our stack can return to a working state. Or, we can contact AWS Support to restore the stack to a usable state
+    - Explanation: 
+        - [AWS Blog](https://aws.amazon.com/blogs/devops/continue-rolling-back-an-update-for-aws-cloudformation-stacks-in-the-update_rollback_failed-state/#:~:text=There%20are%20other%20reasons%20an,dependent%20resource%20did%20not%20stabilize.&text=In%20the%20AWS%20CloudFormation%20console,then%20choose%20Continue%20Update%20Rollback.)
+        - [Documentation](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-continueupdaterollback.html)
+        - [Troubleshooting](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html#troubleshooting-errors-update-rollback-failed)
+- `IMPORT_IN_PROGRESS`: The import operation is currently in progress
+- `IMPORT_COMPLETE`
+- `IMPORT_ROLLBACK_IN_PROGRESS`
+
+## Capabilities
+
+- In order to be able to create IAM roles during stack creation, we have to manually allow this
+- `CAPABILITY_IAM`, `CAPABILITY_NAMED_IAM`: some stack templates might include resources that can affect permissions in your AWS account, for example, by creating new AWS Identity and Access Management (IAM). For those stacks, you must explicitly acknowledge this by specifying one of these capabilities
+- `InsufficientCapabilitiesException`: this exception is returned if the capabilities where not allowed
+
+## cfn-hup
+
+- `cfn-hup` helper is a daemon that detects changes in resource metadata and runs user-specified actions when a change is detected
+- Allows to make configuration updates on our running Amazon EC2 instances through the `UpdateStack` API action
+- Default listening time for update: 15 minutes
+- Can be changed by specifying a `interval`
+
+## Stack Policies
+
+- To protect stack resources from update actions, we can define a stack policy
+- When we set a stack policy on a stack, any update not explicitly allowed is denied by default 
