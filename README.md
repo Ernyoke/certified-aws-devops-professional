@@ -1,5 +1,7 @@
 # certified-aws-devops-professional
 
+## Table of Contents
+
 1. SDLC Automation
     - [CICD - Continuous Integration/Continuous Delivery](1-sdlc-automation/cicd.md)
     - [CodeCommit](1-sdlc-automation/codecommit.md)
@@ -42,3 +44,42 @@
     - [Multi AZ and Multi Region in AWS](5-fault-tolerance/multi-az-region.md)
     - [Disaster Recovery](5-fault-tolerance/disaster-recovery.md)
     - [AWS Organizations](5-fault-tolerance/organizations.md)
+
+## Exam Description
+
+The AWS Certified DevOps Engineer - Professional (DOP-CO1) examination validates technical expertise in provisioning, operating, and managing distributed application systems on the AWS platform. It is intended for individuals who perform a devops engineer role.
+
+It validates an examinee's ability to:
+
+- Implement and manage continuous delivery systems and methodologies on AWS.
+- Implement and automate security controls, governance processes, and compliance validation.
+- Define and deploy monitoring, metrics, and logging systems on AWS.
+- Implement systems that are highly available, scalable, and self-healing on the AWS platform.
+- Design, manage, and maintain tools to automate operational processes.
+
+## Preparation
+
+- Official Exam Guide: [https://d1.awsstatic.com/training-and-certification/docs-devops-pro/AWS-Certified-DevOps-Engineer-Professional_Exam-Guide.pdf](https://d1.awsstatic.com/training-and-certification/docs-devops-pro/AWS-Certified-DevOps-Engineer-Professional_Exam-Guide.pdf)
+
+- There are two types of questions on the examination:
+
+- Multiple choice: Has one correct response and three incorrect responses (distractors).
+- Multiple response: Has two or more correct responses out of five or more options.
+
+- Minimum passing score: 750/1000
+
+- Number of questions: 75
+
+- Time: 190 minutes to complete the exam (with a possibility to request 30 minutes extra for non-native english speakers)
+
+## Exam Content
+
+| **Domain**                                                          | **% of Examination** |
+|---------------------------------------------------------------------|----------------------|
+| Domain 1: SDLC Automation                                           | 22%                  |
+| Domain 2: Configuration Management and Infrastructure as Code       | 19%                  |
+| Domain 3: Monitoring and Logging | 24%                              | 15%                  |
+| Domain 4: Policies and Standards Automation                         | 10%                  |
+| Domain 5: Incident and Event Response                               | 18%                  |
+| Domain 6: High Availability, Fault Tolerance, and Disaster Recovery | 16%                  |
+| **Total**                                                           | **100%**             |
