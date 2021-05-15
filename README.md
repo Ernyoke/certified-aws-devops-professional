@@ -78,7 +78,7 @@ It validates an examinee's ability to:
 |---------------------------------------------------------------------|----------------------|
 | Domain 1: SDLC Automation                                           | 22%                  |
 | Domain 2: Configuration Management and Infrastructure as Code       | 19%                  |
-| Domain 3: Monitoring and Logging | 24%                              | 15%                  |
+| Domain 3: Monitoring and Logging                                    | 15%                  |
 | Domain 4: Policies and Standards Automation                         | 10%                  |
 | Domain 5: Incident and Event Response                               | 18%                  |
 | Domain 6: High Availability, Fault Tolerance, and Disaster Recovery | 16%                  |
