@@ -1,4 +1,4 @@
-theme: jekyll-theme-time-machine
+theme: jekyll-theme-leap-day
 plugins:
   - jekyll-relative-links
 relative_links:
