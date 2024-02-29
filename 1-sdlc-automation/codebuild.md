@@ -1,4 +1,4 @@
-# CodeBuild
+# AWS CodeBuild
 
 - Fully managed build service
 - Alternative to other build tools such as Jenkins

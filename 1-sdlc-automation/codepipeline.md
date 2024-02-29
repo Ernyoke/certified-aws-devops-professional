@@ -1,4 +1,4 @@
-# CodePipeline
+# AWS CodePipeline
 
 - It is a continuous delivery tool and a visual workflow
 - We can define sources: GitHub, CodeCommit, S3

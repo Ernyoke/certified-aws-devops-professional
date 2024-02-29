@@ -1,4 +1,4 @@
-# CodeDeploy
+# AWS CodeDeploy
 
 - Used to deploy an application to one or more EC2 instances automatically
 - Alternative of third party tools such as Ansible, Terraform, Puppet, etc.
