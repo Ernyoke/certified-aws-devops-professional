@@ -121,3 +121,18 @@
     - `CAPABILITY_AUTO_EXPAND`: used for nested stacks
 - Create CodePipeline with CloudFormation: [https://docs.aws.amazon.com/codepipeline/latest/userguide/tutorials-cloudformation.html](https://docs.aws.amazon.com/codepipeline/latest/userguide/tutorials-cloudformation.html)
 - CodePipeline-Nested-CFN: [https://github.com/aws-samples/codepipeline-nested-cfn](https://github.com/aws-samples/codepipeline-nested-cfn)
+
+## Best Practices
+
+- We can use parallel actions within a stage using `RunOrder`
+- We can deploy to pre-prod before deploying to prod with a manual approval step
+- Any kind of event in CodePipeline will be detected in EventBridge => we can intercept events, such as deployment failures
+- Running code from CodePipeline: we can use the `Invoke` action
+- `Invoke` action supports invoking Step Functions
+
+## Multi Region Deployments
+
+- Actions in our pipeline can be in different regions
+- S3 Artifact Stores must be defined in each region where we have actions
+- CodePipeline must have read/write access to these buckets
+- CodePipeline handles the copying of input arguments from one AWS region to other when performing cross-region actions (example: deploying CloudFormation templates)
