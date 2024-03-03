@@ -1,4 +1,4 @@
-# CodeStar
+# AWS CodeStar
 
 - It is an integrated environment where we can quickly develop, build and deploy applications in AWS
 - Integrates CodeCommit, CodeBuild, CodeCommit and CodeDeploy together
