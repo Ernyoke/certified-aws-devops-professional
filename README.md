@@ -10,6 +10,7 @@
     - [AWS CodePipeline](1-sdlc-automation/codepipeline.md)
     - [AWS CodeStart](1-sdlc-automation/codestar.md)
     - [AWS CodeArtifact](1-sdlc-automation/codeartifact.md)
+    - [Amazon CodeGuru](1-sdlc-automation/codeguru.md)
     - [Jenkins on AWS](1-sdlc-automation/jenkins.md)
     - [SDLC Whitepapers](1-sdlc-automation/whitepapers.md)
 2. Configuration Management and Infrastructure as Code
