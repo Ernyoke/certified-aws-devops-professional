@@ -12,6 +12,7 @@
     - [AWS CodeArtifact](1-sdlc-automation/codeartifact.md)
     - [Amazon CodeGuru](1-sdlc-automation/codeguru.md)
     - [EC2 Image Builder](1-sdlc-automation/ec2-image-builder.md)
+    - [AWS Amplify](1-sdlc-automation/amplify.md)
     - [Jenkins on AWS](1-sdlc-automation/jenkins.md)
     - [SDLC Whitepapers](1-sdlc-automation/whitepapers.md)
 2. Configuration Management and Infrastructure as Code
