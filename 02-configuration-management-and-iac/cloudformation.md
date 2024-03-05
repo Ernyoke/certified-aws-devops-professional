@@ -38,17 +38,29 @@
 ## CloudFormation Building Blocks
 
 - Template components:
-    1. Resources: AWS resources declared in the template (MANDATORY)
-    2. Parameters: dynamic input for the templates
-    3. Mappings: static variables for the templates
-    4. Outputs: references to what has be created
-    5. Conditionals: list of conditions ot perform resource creation
-    6. Metadata
+    - AWSTemplateFormatVersion: identifies capabilities of the template. Usually it is a date
+    - Description: comments about the template
+    - Resources (MANDATORY): AWS resources declared in the template
+    - Parameters: dynamic input for the templates
+    - Mappings: static variables for the templates
+    - Outputs: references to what has be created
+    - Conditionals: list of conditions ot perform resource creation
 - Template helpers:
-    1. References
-    2. Functions
+    - References
+    - Functions
 
-## Parameters
+## CloudFormation Resources
+
+- Resources are the of CF template and they are mandatory
+- They represent the different AWS components that will be created and configured
+- Resources are declared and reference each other
+- AWS figures out creation, updates and deletes of resources
+- Resource types identifiers are of the form of: `service-provider::service-name::data-type-name`. Example: `AWS::EC2::Instance`
+- We can create a dynamic number of resources using CloudFormation Macros and Transform
+- Almost every AWS service is supported. For those which are not supported, we can use CloudFormation Custom Resources as a workaround
+- Referencing a resource from another resource can be done with `!Ref` function
+
+## CloudFormation Parameters
 
 - Parameters are a way to provide inputs to AWS CloudFormation template
 - They are important if we want to:
@@ -57,38 +69,51 @@
 - Parameters do have a type, preventing some errors before execution
 - Parameters can be controller by all of these settings:
     - Types:
-        - String
-        - Number
-        - CommaDelimitedList
-        - List< Type >
-        - AWS parameter (to help catch invalid values - match against existing values in AWS account)
-    - Description
-    - Constraints
-    - Constraint Description (String)
-    - Min/Max Length
-    - Min/Max Value
-    - Allowed Values (array)
-    - Allowed Pattern (regex)
-    - No Echo (boolean)
+        - `String`
+        - `Number`
+        - `CommaDelimitedList`
+        - `List<Type>`
+        - SSM Parameters (get parameter value from SSM Parameter Store)
+    - `Description`
+    - `ConstraintDescription` (String)
+    - `MinLength`/`MaxLength`
+    - `MinValue`/`MaxValue`
+    - `Default`
+    - `AllowedValues` (array)
+    - `AllowedPattern` (regex)
+    - `NoEcho` (boolean; do not display his value anywhere, useful for passwords) 
+- Example:
+    ```yaml
+    Parameters:
+        InstanceType:
+            Description: Chose an EC2 instance type
+            Type: String
+            AllowedValues:
+            - t2.micro
+            - t2.small
+            - t2.medium
+        Password:
+            Description: Admin password
+            Type: String
+            NoEcho: True
+    
+    Resources:
+        MyEC2Instance:
+            Type: AWS::EC2::Instance
+            Properties:
+                InstanceType: !Ref InstanceType
+                ImageId: ami-1233
+    ```
 - Referencing a parameter can be done with function `!Ref`
 - Pseudo Parameters:
     - AWS offers us pseudo parameters in any CloudFormation template
     - These can be used at any time and are enabled by default
     - Examples:
-        - AWS::AccountId
-        - AWS::Region
-        - AWS::StackId
-        - AWS::StackName
-        - AWS::NoValue
-
-## Resources
-
-- Resources are the of CF template and they are mandatory
-- They represent the different AWS components that will be created and configured
-- Resources are declared and reference each other
-- AWS figures out creation, updates and deletes of resources
-- Resource types identifiers are of the form of: `AWS::aws-product-name::data-type-name`
-- We can not create a dynamic amount of resources
+        - `AWS::AccountId`
+        - `AWS::Region`
+        - `AWS::StackId`
+        - `AWS::StackName`
+        - `AWS::NoValue`
 
 ## Mappings
 
@@ -111,7 +136,6 @@
 - We can not delete a CF stack if its outputs are being references by another stack
 - Output `Export` block: has to be specified in order the the output to be able to be imported in another template
 - `!ImportValue` or `Fn::ImportValue`: imports an output into a stack 
-
 
 ## Conditions
 
