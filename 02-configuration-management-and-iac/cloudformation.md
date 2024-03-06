@@ -1,4 +1,4 @@
-# CloudFormation
+# AWS CloudFormation
 
 - CloudFormation is a declarative way of outlining AWS infrastructure for any resources
 
@@ -115,7 +115,7 @@
         - `AWS::StackName`
         - `AWS::NoValue`
 
-## Mappings
+## CloudFormation Mappings
 
 - Mappings are fixed variables within a CF template
 - They are handy to differentiate between different environments, regions, AMI types, etc.
@@ -127,17 +127,17 @@
     !FindInMap [MapName, TopLevelKey, SecondLevelKey]
     ```
 
-## Output
+## CloudFormation Output
 
 - Output sections are optional
 - Output values can be imported into other stacks
 - We can also view the outputs in the AWS console or using the AWS CLI
-- It enables a way to perform some cross stack collaborations, as we let experts handle their own part of the stack
-- We can not delete a CF stack if its outputs are being references by another stack
+- It is the best way to perform collaboration across stacks, different stacks can be handled an maintained by different people
+- We can not delete a CloudFormation stack if its outputs are being references by another stack
 - Output `Export` block: has to be specified in order the the output to be able to be imported in another template
 - `!ImportValue` or `Fn::ImportValue`: imports an output into a stack 
 
-## Conditions
+## CloudFormation Conditions
 
 - Conditions are used to control the creation of resources or outputs based on some conditions
 - Conditions can reference other conditions, parameters or values
@@ -147,12 +147,19 @@
         CreateProdResources: !Equals [ !Ref EnvType, prod ]
     ```
 - Intrinsic (logical) functions for conditions:
-    - Fn::And
-    - Fn::Equals
-    - Fn::If
-    - Fn::Not
-    - Fn::Or
+    - `Fn::And`
+    - `Fn::Equals`
+    - `Fn::If`
+    - `Fn::Not`
+    - `Fn::Or`
 - Using a condition: they can be applied to resources, outputs, etc.
+- Example of using a condition on a resource:
+    ```yaml
+    Resources:
+        MountPoint:
+            TYpe: AWS::EC2::VolumeAttachment
+            Condition: CreateProdResources
+    ```
 
 ## Intrinsic Functions
 
@@ -171,6 +178,79 @@
 - `Fn::Sub`::
     - Used for substitute values in strings
     - String must contain a `${VariableName}` which will be substituted
+- `Fn::Base64`
+- `Fn:Cidr`
+- `Fn:GetAZs`
+
+## CloudFormation Rollbacks
+
+- Stack creation fails:
+    - Default: everything rolls back, stack will be deleted (`OnFailure=ROLLBACK`)
+    - We can disable the rollback in order to troubleshoot what happened (`OnFailure=DO_NOTHING`)
+    - If we want to get rid of the whole stack on failure, we can set `OnFailure=DELETE`
+- Stack update fails:
+    - The stack automatically rolls back to the previous known working state
+    - We can see the in the logs what happened and what are the error messages
+- In case of a rollback failure happens we have to manually fix the issue and then use `ContinueUpdateRollback` API from Console
+
+## CloudFormation Service Role
+
+- It is an IAM role that allows CloudFormation to create/update/delete stacks on our behalf
+- It can be used to give the ability to users to create/update/delete the stack resources even if they don't explicitly have permission to work with each resource from the stack
+- The user must have `iam:PassRole` permission
+
+## CloudFormation Capabilities
+
+- In order to be able to create or update IAM roles during stack creation, we have to manually allow this
+- `CAPABILITY_IAM`, `CAPABILITY_NAMED_IAM`: some stack templates might include resources that can affect permissions in your AWS account, for example, by creating new AWS Identity and Access Management (IAM). For those stacks, you must explicitly acknowledge this by specifying one of these capabilities
+- `CAPABILITY_AUTO_EXPAND`: necessary when the template includes Macros or Nested Stacks to perform dynamic transformations
+- `InsufficientCapabilitiesException`: this exception is returned if the capabilities where not allowed
+
+## CloudFormation `DeletionPolicy`
+
+- We can put a DeletionPolicy on any resource to control what happens when the CloudFormation template is deleted or the resource is removed from the template
+- Extra safety measure to preserve and backup resources
+- `DeletionPolicy=Delete`:
+    - Default for all resources, excluding RDS db cluster resources, where the default is snapshot 
+    - To delete an S3 bucket, we have to delete everything first from the bucket
+- `DeletionPolicy=Retain`:
+    - To be specify on resource to preserve/backup in case of CloudFormation deletes
+    - Works for any resource and nested stacks
+- `DeletionPolicy=Snapshot`:
+    - Works on EBS volumes, ElastiCache cluster, ElastiCache ReplicationGroup, RDS database instance, RDS database cluster, Redshift cluster
+
+## CloudFormation Stack Policies
+
+- During a CloudFormation stack update, all update actions are allowed on all resources (default)
+- A Stack Policy is a JSON document that defines the update actions allowed on specific resources during the stack update
+- Protect resources from unintentional updates
+- When we set a Stack Policy, all resources in the Stack are protected by default
+- We have to specify an explicit `ALLOW` for the resources we want to be updatable
+
+## CloudFormation Termination Protection
+
+- To prevent accidental deletes on CloudFormation Stacks, we can use Termination Protection option
+
+## Custom Resources
+
+- We can define custom resources to address any of the following use cases:
+    - An AWS resource is not yet covered (new service for example)
+    - Track an on-premise resource
+    - Have a custom script running during create/update/delete, for example empty an S3 bucket
+    - Fetch an AMI id (the old way)
+- Custom resources are backed by either Lambda functions (most common) or an SNS topic
+- To define a custom resource we have to use the `ServiceToken` property which has to be an ARN to a Lambda function or SNS topic
+- There will be an event passed to the Lambda which contains the request type (create, update, delete) and the response url (the url for callback from the function). We can also pass some parameters as resource properties (key-value pairs) to the Lambda
+
+## Dynamic References
+
+- Used to reference external values stored in SSM Parameter Store and Secrets Manager
+- CloudFormation retrieves the value of the reference during create/update/delete operations
+- Dynamic references can be:
+    - `ssm` for plaintext stored in SSM Parameter Store
+    - `ssm-secure` for secure string stored in SSM Parameter Store
+    - `secretsmanager` for secret values stored in Secrets Manager
+- For RDS Databases, if we have `ManageMasterUserPassword` field set to true, CloudFormation will automatically create a secret password in Secrets Manager
 
 ## User Data in EC2 for CloudFormation
 
@@ -199,16 +279,6 @@
     - We can retrieve the logs by logging into the instance, but we have to disable rollback on failure in order for the CF to not delete the instance
     - Instance must have connection to the internet. If the instance is in a VCP, it should be able to connect to the internat using a NAT gateway
 
-## CloudFormation Rollbacks
-
-- Stack creation fails:
-    - Default: everything rolls back, stack will be deleted (`OnFailure=ROLLBACK`)
-    - We can disable the rollback in order to troubleshoot what happened (`OnFailure=DO_NOTHING`)
-    - If we want to get rid of the whole stack on failure, we can set `OnFailure=DELETE`
-- Stack update fails:
-    - The stack automatically rolls back to the previous known working state
-    - We can see the in the logs what happened and what are the error messages
-
 ## Nested Stacks
 
 - They allow to isolate repeated patterns, common components in separate stacks and call them from other stack
@@ -219,22 +289,6 @@
 
 - When we update a stack, we need to know what will change before the changes themselves are applied
 - Change sets wont say if the update will be successful
-
-## Retain Data on Delete
-
-- We can put a DeletionPolicy on any resource to control what happens when the CloudFormation template is deleted
-- `DeletionPolicy=Retain`:
-    - To be specify on resource to preserve/backup in case of CloudFormation deletes
-    - Works for any resource and nested stacks
-- `DeletionPolicy=Snapshot`:
-    - Works on EBS volumes, ElastiCache cluster, ElastiCache ReplicationGroup, RDS database instance, RDS database cluster, Redshift cluster
-- `DeletionPolicy=Delete`:
-    - Default for all resources, excluding RDS db cluster resources, where the default is snapshot 
-    - To delete an S3 bucket, we have to delete everything first from the bucket
-
-## Termination Protection
-
-- To prevent accidental deletes on CloudFormation templates, we have to use Termination Protection
 
 ## SSM Parameters
 
@@ -258,16 +312,6 @@
     - The code for the lambda can be references under `Code S3Bucket` tag
     - We have to specify the bucket and location for the zip in S3
     - We can also reference the version of the archive by `S3ObjectVersion`
-
-## Custom Resources
-
-- We can define custom resources to address any of the following use cases:
-    - An AWS resource is not yet covered (new service for example)
-    - Track an on-premise resource
-    - Empty an S3 bucket
-    - Fetch an AMI id (the old way)
-- Custom resources are Lambda function which will be invoked at every create, update or delete event
-- There will be an event passed to the Lambda which contains the request type (create, update, delete) and the response url (the url for callback from the function). We can also pass some parameters as resource properties (key-value pairs) to the Lambda
 
 ## Drift Detection
 
@@ -295,20 +339,9 @@
 - `IMPORT_COMPLETE`
 - `IMPORT_ROLLBACK_IN_PROGRESS`
 
-## Capabilities
-
-- In order to be able to create IAM roles during stack creation, we have to manually allow this
-- `CAPABILITY_IAM`, `CAPABILITY_NAMED_IAM`: some stack templates might include resources that can affect permissions in your AWS account, for example, by creating new AWS Identity and Access Management (IAM). For those stacks, you must explicitly acknowledge this by specifying one of these capabilities
-- `InsufficientCapabilitiesException`: this exception is returned if the capabilities where not allowed
-
 ## cfn-hup
 
 - `cfn-hup` helper is a daemon that detects changes in resource metadata and runs user-specified actions when a change is detected
 - Allows to make configuration updates on our running Amazon EC2 instances through the `UpdateStack` API action
 - Default listening time for update: 15 minutes
 - Can be changed by specifying a `interval`
-
-## Stack Policies
-
-- To protect stack resources from update actions, we can define a stack policy
-- When we set a stack policy on a stack, any update not explicitly allowed is denied by default 

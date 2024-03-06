@@ -16,7 +16,7 @@
     - [Jenkins on AWS](01-sdlc-automation/jenkins.md)
     - [SDLC Whitepapers](01-sdlc-automation/whitepapers.md)
 2. Configuration Management and Infrastructure as Code
-    - [CloudFormation](02-configuration-management-and-iac/cloudformation.md)
+    - [AWS CloudFormation](02-configuration-management-and-iac/cloudformation.md)
     - [Elastic Beanstalk](02-configuration-management-and-iac/eb.md)
     - [Serverless - AWS Lambda Functions, Step Functions and API Gateway](02-configuration-management-and-iac/serverless.md)
     - [ECS - Elastic Container System](02-configuration-management-and-iac/ecs.md)
