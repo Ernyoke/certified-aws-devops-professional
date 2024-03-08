@@ -259,47 +259,81 @@
 - **The entire script should be passed through the function Fn::base64**
 - All the log of the user data will be stored in `/var/log/cloud-init-output.log`
 
-## cfn-init
+## CloudFormation Helper Scripts
 
-- `AWS::CloudFormation::Init` must be in the metadata section of a resource
+- The problems with Use Data are the following:
+    - It is a bash script, what if we have a very large configuration?
+    - What if we want to evolve the state of the EC2 instance without terminating it and creating a new one?
+    - How do we know if the User Data script was successfully completed?
+- Solution: **CloudFormation Helper Scripts** : Python scripts that come directly on Amazon Linux AMIs, or they can be installed using `yum` or `dnf` on non-Amazon Linux AMIs
+- CloudFormation Helper Scripts are to following: `cfn-init`, `cfn-signal`, `cfn-get-metadata`, `cnf-hup`
+
+### cnf-init
+
+- `AWS::CloudFormation::Init`:
+    - A block of configuration that belongs to `Metadata` block
+    - Contains the following:
+        - Packages: used to download and install pre-packaged apps and components of Linux/Windows
+        - Groups: define user groups
+        - Users: define users and to which group they belong
+        - Sources: download files and archives and place them on the EC2 instance
+        - Files: create files on the EC2 instance using inline text or pull files from an URL
+        - Commands: series of shell commands
+        - Services: launch a list of services
+- cnf-init is used ti retrieve and interpret the resource metadata, installing packages, creating files and starting services
 - With the cfn-init script it helps make complex EC2 configurations readable
 - The EC2 instance will query the CloudFormation service to get the init data
 - Logs will be available in `/var/log/cfn-init.log` file
 
-## cfn-signal and Wait Conditions
+### cfn-signal and Wait Conditions
 
-- Used to tell CloudFormation that the EC2 instance got properly configured after cfn-init script finished
-- We have to run the cfn-signal script right after the cfn-init script finished. This will tell CloudFormation if the init script succeeded or not
-- WaitConditions: tells CloudFormation to wait until it receives a signal from cfn-signal
-    - We block the template until it receives the cfn-signal
+- Used to tell CloudFormation that the EC2 instance got properly configured after `cfn-init` script finished
+- We have to run the `cfn-signal` script right after the `cfn-init` script finished. This will tell CloudFormation if the init script succeeded or not
+- WaitConditions: tells CloudFormation to wait until it receives a signal from `cfn-signal`
+    - We block the template until it receives a signal from `cfn-signal`
     - We attach a `CreationPolicy`: how many signal we want to see and for how much we want to wait
-- Wait condition did not receive the required number of signals from an EC2 instance:
+- In case a wait condition did not receive the required number of signals from an EC2 instance:
     - We have to ensure the AMI has the CloudFormation scripts installed
-    - We have to verify the cfn-init and cfn-signal commands were successfully run on the instance
-    - We can retrieve the logs by logging into the instance, but we have to disable rollback on failure in order for the CF to not delete the instance
-    - Instance must have connection to the internet. If the instance is in a VCP, it should be able to connect to the internat using a NAT gateway
+    - We have to verify the `cfn-init` and `cfn-signal` commands were successfully run on the instance. We can view the logs such as `/var/log/cloud-init.log` or `/var/log/cnf-init.log`
+    - We can retrieve the logs by logging into the instance, but we have to disable rollback on failure in order for CloudFormation to not delete the instance
+    - The instance must have connection to the internet. If the instance is in a VCP, it should be able to connect to the internat using a NAT gateway
 
-## Nested Stacks
+## CloudFormation Nested Stacks
 
 - They allow to isolate repeated patterns, common components in separate stacks and call them from other stack
 - Nested stacks are considered to be best practice
 - To update a nested stack, alway update the parent (root stack)
-
-## ChangeSets
-
-- When we update a stack, we need to know what will change before the changes themselves are applied
-- Change sets wont say if the update will be successful
-
-## SSM Parameters
-
-- Type of parameter: `AWS::SSM:Parameter::Value< String >`
-- Parameter will be fetched from the path specified by `Default` key
-- In parameters tab in CloudFormation we can see a resolved value for the SSM parameters
-- AWS provides some default public SSM parameters which can be referenced (example: latest EC2 AMI)
+- Nested stacks can have nested stacks in themselves
+- Cross Stacks vs Nested Stacks:
+    - Cross Stacks:
+        - Helpful when stacks have different lifecycles
+        - The use outputs exported by other stacks
+    - Nested Stacks:
+        - Helpful when components must be re-used, example a properly configured Application Load Balancer
 
 ## CloudFormation - `DependsOn`
 
 - It is a way to define a specific resource should be created after another one was already created
+
+## CloudFormation StackSets
+
+- Used for create/update/delete stacks across multiple accounts and regions, all in a single operation
+- Administrator account has to create StackSets
+- Target accounts will create/update/delete the stack instances from the StackSet
+- Permission models:
+    - Self-managed Permissions: 
+        - Create the IAM roles (with established trusted relationship) in both administrator and target accounts
+        - Deploy to any target account in which we have permissions to create IAM role
+    - Service-managed Permissions:
+        - Deploy to accounts managed by AWS Organizations
+        - StackSets create the IAM Roles on our behalf (enable trusted access with AWS Organizations)
+        - We must enable all features in AWS Organizations
+        - Ability to deploy to any new accounts added to our organization in the future
+
+## CloudFormation ChangeSets
+
+- When we update a stack, we need to know what will change before the changes themselves are applied
+- Change sets wont say if the update will be successful
 
 ## Deploying Lambda Functions using CloudFormation
 
