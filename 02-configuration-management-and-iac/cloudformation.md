@@ -266,7 +266,7 @@
     - What if we want to evolve the state of the EC2 instance without terminating it and creating a new one?
     - How do we know if the User Data script was successfully completed?
 - Solution: **CloudFormation Helper Scripts** : Python scripts that come directly on Amazon Linux AMIs, or they can be installed using `yum` or `dnf` on non-Amazon Linux AMIs
-- CloudFormation Helper Scripts are to following: `cfn-init`, `cfn-signal`, `cfn-get-metadata`, `cnf-hup`
+- CloudFormation Helper Scripts are to following: `cfn-init`, `cfn-signal`, `cfn-get-metadata`, `cfn-hup`
 
 ### cnf-init
 
@@ -318,8 +318,8 @@
 ## CloudFormation StackSets
 
 - Used for create/update/delete stacks across multiple accounts and regions, all in a single operation
-- Administrator account has to create StackSets
-- Target accounts will create/update/delete the stack instances from the StackSet
+- An administrator account has to create StackSets, while the target accounts will create/update/delete the stack instances from the StackSet
+- When we update a StackSet in the admin account, all the associated target accounts will receive this update
 - Permission models:
     - Self-managed Permissions: 
         - Create the IAM roles (with established trusted relationship) in both administrator and target accounts
@@ -329,11 +329,16 @@
         - StackSets create the IAM Roles on our behalf (enable trusted access with AWS Organizations)
         - We must enable all features in AWS Organizations
         - Ability to deploy to any new accounts added to our organization in the future
+- StackSets in AWS Organizations:
+    - Provide the ability to automatically deploy stack instances when new accounts are added to the organizations
+    - We can delegate StackSets administration to member accounts from AWS Organizations
+    - Trusted access with AWS Organization must be enabled before delegated administrators can deploy to AWS Organizations managed accounts
 
 ## CloudFormation ChangeSets
 
 - When we update a stack, we need to know what will change before the changes themselves are applied
-- Change sets wont say if the update will be successful
+- ChangeSets wont tell us in advance if the update will be successful
+- For Nested Stacks we will see the changes across all the stacks
 
 ## Deploying Lambda Functions using CloudFormation
 
@@ -372,6 +377,24 @@
 - `IMPORT_IN_PROGRESS`: The import operation is currently in progress
 - `IMPORT_COMPLETE`
 - `IMPORT_ROLLBACK_IN_PROGRESS`
+
+## CloudFormation Troubleshooting
+
+- `DELETE_FAILED`:
+    - Some resources could not have been deleted
+    - In case of S3 buckets, the buckets have to be emptied before deletion
+    - We have to empty the buckets manually, or use a Custom Resource with a Lambda Function
+    - Security Groups cannot be deleted until all attachments are removed
+    - `DeletionPolicy=Retain` will skip the deletion of the resource that is failing to be removed
+- `UPDATE_ROLLBACK_FAILED`:
+    - Can be caused by resources changed outside of CloudFormation, insufficient permissions, Auto Scaling Group that does not receive enough signals, etc.
+    - Solution is to manually fix the errors and then issue the following API call `ContinueUpdateRollback`
+- StackSets Troubleshooting:
+    - A stack operation failed and the stack instance status is `OUTDATED`:
+        - Might be caused by insufficient permissions in a target account for creating resources that are specified in the template
+        - The template could be trying to create global resources that must be unique such as S3 buckets
+        - The admin account does not have a trust relationship with the target account
+        - We might have reached a limit or a quota in the target account
 
 ## cfn-hup
 
