@@ -298,6 +298,12 @@
     - We can retrieve the logs by logging into the instance, but we have to disable rollback on failure in order for CloudFormation to not delete the instance
     - The instance must have connection to the internet. If the instance is in a VCP, it should be able to connect to the internat using a NAT gateway
 
+### cfn-hup
+
+- Can be used to tell our EC2 instance to look for Metadata changes every 15 (default, can be changed by specifying an `interval`) minutes and apply the Metadata configuration
+- Allows to make configuration updates on our running Amazon EC2 instances through the `UpdateStack` API action
+- It relies on`cfn-hup` configurations stored in `/etc/cnf/cnf-hup.conf` and `/etc/cfn/hooks.d/cnf-auto-reloader.conf`
+
 ## CloudFormation Nested Stacks
 
 - They allow to isolate repeated patterns, common components in separate stacks and call them from other stack
@@ -340,6 +346,22 @@
 - ChangeSets wont tell us in advance if the update will be successful
 - For Nested Stacks we will see the changes across all the stacks
 
+## CloudFormation Drift Detection
+
+- Drift detection operation on a stack determines whether the stack has drifted (changed) from its expected template configuration
+- Returns detailed information about the drift status of each resource in the stack that supports drift detection
+- StackSets Drift Detection:
+    - We can use CloudFormation drift detection on StackSets as well
+    - Performs drift detection on the stack associated with each stack instance in the StackSet
+    - If the current state of a resource in a stack varies from the expected state:
+        - The stack is considered drifted
+        - The stack instance that the stack is associated with is considered drifted
+        - The StackSet is considered drifted
+    - Drift detection identifies unmanaged changes that happen outside of CFN
+    - Changes made through CloudFormation to a stack directly (not at the StackSet level) are not considered drifted (it is not a best practice)
+    - We can stop drift detection on a StackSet
+
+
 ## Deploying Lambda Functions using CloudFormation
 
 - Inline: we can define the Lambda code inside the CF template
@@ -351,11 +373,6 @@
     - The code for the lambda can be references under `Code S3Bucket` tag
     - We have to specify the bucket and location for the zip in S3
     - We can also reference the version of the archive by `S3ObjectVersion`
-
-## Drift Detection
-
-- Drift detection operation on a stack determines whether the stack has drifted from its expected template configuration
-- Returns detailed information about the drift status of each resource in the stack that supports drift detection
 
 ## Status Codes
 
@@ -395,10 +412,3 @@
         - The template could be trying to create global resources that must be unique such as S3 buckets
         - The admin account does not have a trust relationship with the target account
         - We might have reached a limit or a quota in the target account
-
-## cfn-hup
-
-- `cfn-hup` helper is a daemon that detects changes in resource metadata and runs user-specified actions when a change is detected
-- Allows to make configuration updates on our running Amazon EC2 instances through the `UpdateStack` API action
-- Default listening time for update: 15 minutes
-- Can be changed by specifying a `interval`
