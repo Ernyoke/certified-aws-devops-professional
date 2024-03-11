@@ -2,48 +2,50 @@
 
 ***Elastic Beanstalk* is a developer centric view of deploying application on AWS.**
 - A managed service
-  - Instance configuration
-  - OS is handled by Beanstalk
-  - Deployment strategy is configurable but performed by Beanstalk
-  - Application code configurable
-- It will leverage all the AWS components that we have gone over thus far:
-  - EC2
-  - ASG
-  - ELB
-  - RDS
-  - Etc..
+    - Instance configuration
+    - OS is handled by Beanstalk
+    - Deployment strategy is configurable but performed by Beanstalk
+    - Application code configurable
+- It will leverage all the AWS components that we have gone over thus far: EC2, ASG, ELB, RDS, Etc..
 - Elastic Beanstalk is free but we pay for the underlying instances
 - Three architecture models:
-  - Single instance deployment: good for developers
-  - LB + ASG: great for production or staging web applications
-  - ASG only: great for non-web apps in production
+    - Single instance deployment: good for developers
+    - LB + ASG: great for production or staging web applications
+    - ASG only: great for non-web apps in production
 - Elastic Beanstalk has three different components:
-  - Application
-  - Application Version (Each deployment gets assigned a version)
-  - Environment name (dev, staging, prod): free naming
+    - Application: collection of EB components (environments, versions, configuration, etc.)
+    - Application Version (Each deployment gets assigned a version)
+    - Environment (dev, staging, prod):
+        - Collection of AWS resources running an application version
+        - Tiers: Web Server Environment Tier and Worker Tier Environment
 - We deploy application versions to environments and can promote application versions to the next environment
 - Rollback feature to previous application versions
 - Full control over the lifecycle of environments
 - Support for many platforms:
-  - Go
-  - Java
-  - Python
-  - Node.js
-  - Ruby
-  - Single Container Docker
-  - Multi Container Docker
-  - Pre-configure Docker
-  - Write our own custom platforms (If the any of the above is not supported)
+    - Go
+    - Java (SE, Tomcat)
+    - .NET Core on Linux / .NET Server on Windows
+    - Python
+    - Node.js
+    - Ruby
+    - Single Container Docker
+    - Multi Container Docker
+    - Pre-configure Docker
+    - Packer Builder
+    - Write our own custom platforms (If the any of the above is not supported)
+- Web Server Tier vs. Worker Tier:
 
-## Elastic Beanstalk Deployment modes
+![Web Server Tier vs. Worker Tier](images/web-server-vs-worker.png)
+
+## Elastic Beanstalk Deployment Modes
 
 - **Single Instance deployment**: good for development, we get 1 ec2 instance in 1 ASG and 1 Elastic IP. DNS names maps straight ot the Elastic IP
 - **High Availability with Load Balancer**: great for production, we have an ASG across multiple AZs
 - Deployment updates:
-  - **All at once**: we deploy all our applications in on go. Fastest, but instances have a downtime. No additional cost is applied while deploying
-  - **Rolling**: update e few instances at a time, move onto next set of instances (bucket) if the first set was healthy. The application will run bellow capacity for a given period (bucket size). At some point the application will run both versions. No additional cost is encountered during deployment
-  - **Rolling with additional batches**: similar deployment procedure as the **rolling** approach with the difference of having an additional batch started at the beginning of deployment with the newer version of the application. Afterwards, the older instanced are gradually moved to newer version. While deploying, both application version will be running at the same time. Minor additional cost may be encountered since the additional batch will be present until the deployment is finished.
-  - **Immutable**: new version of the application is deployed to an entirely new ASG. If the new version passes the initial validation, the old ASG is terminated. Deployment will cause 0 downtime. The additional cost encountered while deploying is the highest compared to other deployment types.
+    - **All at once**: we deploy all our applications in on go. Fastest, but instances have a downtime. No additional cost is applied while deploying
+    - **Rolling**: update e few instances at a time, move onto next set of instances (bucket) if the first set was healthy. The application will run bellow capacity for a given period (bucket size). At some point the application will run both versions. No additional cost is encountered during deployment
+    - **Rolling with additional batches**: similar deployment procedure as the **rolling** approach with the difference of having an additional batch started at the beginning of deployment with the newer version of the application. Afterwards, the older instanced are gradually moved to newer version. While deploying, both application version will be running at the same time. Minor additional cost may be encountered since the additional batch will be present until the deployment is finished.
+    - **Immutable**: new version of the application is deployed to an entirely new ASG. If the new version passes the initial validation, the old ASG is terminated. Deployment will cause 0 downtime. The additional cost encountered while deploying is the highest compared to other deployment types.
 
 ### Blue / Green Deployment
 
@@ -62,8 +64,8 @@
 - In order to be able to deploy again, we have to remove older versions
 - To phase out old versions, we can use a lifecycle policy
 - This policy can be based on:
-  - Time (remove versions which are older than...)
-  - Space (remove older versions if we have more versions than...)
+    - Time (remove versions which are older than...)
+    - Space (remove older versions if we have more versions than...)
 - Currently used versions are not deleted
 - There is an option to not delete source bundles from S3, only from beanstalk interface
 
@@ -72,11 +74,11 @@
 - A zip file containing our code must be deployed to Elastic Beanstalk
 - All the parameters set in the UI can be configured with code using files
 - Requirements:
-  - in the .ebextensions/ directory in the root of source code
-  - YAML / JSON format
-  - .config extensions (example: logging.config)
-  - Able to modify some default settings using: option_settings
-  - Ability to add resources such as RDS, ElastiCache, DynamoDB, etc...
+    - in the .ebextensions/ directory in the root of source code
+    - YAML / JSON format
+    - .config extensions (example: logging.config)
+    - Able to modify some default settings using: option_settings
+    - Ability to add resources such as RDS, ElastiCache, DynamoDB, etc...
 - Resources managed by .ebextensions get deleted if the environment goes away
 - The .ebextensions folder goes to the root of our project
 
@@ -93,37 +95,37 @@
 - All resources and configurations are preserved after cloning
 - Settings can be changed for the new EB stack after cloning
 - Migrate Load Balancer:
-  - The LB type can not be changed after the EB environment was created
-  - In order to be able to change the type of an LB, we need to do a migration:
-      1. Create a new environment with the same configurations as the original except LB => **this means we can not do cloning !!!**
-      2. Deploy our application into the new environment
-      3. Shift the traffic from the old environment to the new one (this can be done with a CNAME swap or DNS update)
+    - The LB type can not be changed after the EB environment was created
+    - In order to be able to change the type of an LB, we need to do a migration:
+        1. Create a new environment with the same configurations as the original except LB => **this means we can not do cloning !!!**
+        2. Deploy our application into the new environment
+        3. Shift the traffic from the old environment to the new one (this can be done with a CNAME swap or DNS update)
 - Decouple RDS from the EB stack:
-  - RDS database can be added to the EB stack, although it is not recommended for production, because the DB lifecycle is tied to the EB lifecycle
-  - Steps to decouple RDS:
-    1. Create a snapshot form the DB for safety
-    2. Protect the RDS DB from deletion
-    3. Create a new EB environment without RDS and point the application to the existing RDS instance
-    4. Perform a CNAME swap
-    5. Terminate the old EB stack (RDS wont be deleted because of the protection)
-    6. Delete CloudFormation stack (it will be in DELETE_FAILED state)
+    - RDS database can be added to the EB stack, although it is not recommended for production, because the DB lifecycle is tied to the EB lifecycle
+    - Steps to decouple RDS:
+        1. Create a snapshot form the DB for safety
+        2. Protect the RDS DB from deletion
+        3. Create a new EB environment without RDS and point the application to the existing RDS instance
+        4. Perform a CNAME swap
+        5. Terminate the old EB stack (RDS wont be deleted because of the protection)
+        6. Delete CloudFormation stack (it will be in DELETE_FAILED state)
 
 ## Elastic Beanstalk and Docker
 
 - We can run docker container if we provide:
-  - Dockerfile: EB will build an run the Docker container
-  - Dockerrun.aws.json (v1): describe where the Docker image should be downloaded from (DockerHub, ECR, etc.)
+    - Dockerfile: EB will build an run the Docker container
+    - Dockerrun.aws.json (v1): describe where the Docker image should be downloaded from (DockerHub, ECR, etc.)
 - EB in single container mode wont use ECS!
 - Multi Docker Container:
-  - Will run multiple containers per EC2 instance
-  - Will create:
-    - ECS Cluster
-    - EC2 instances in an ECS cluster
-    - Load Balancer (high availability mode)
-    - Task definition and execution
-  - Requires a config of Dockerrun.aws.json (V2) in the root of the source code
-    - Dockerrun.aws.json is used to generate the ECS task definition
-    - Docker images should be pre-build and stored in ECR, DockerHub, etc.
+    - Will run multiple containers per EC2 instance
+    - Will create:
+        - ECS Cluster
+        - EC2 instances in an ECS cluster
+        - Load Balancer (high availability mode)
+        - Task definition and execution
+    - Requires a config of Dockerrun.aws.json (V2) in the root of the source code
+        - Dockerrun.aws.json is used to generate the ECS task definition
+        - Docker images should be pre-build and stored in ECR, DockerHub, etc.
 
 ## Elastic Beanstalk and HTTPS
 
@@ -131,9 +133,9 @@
 - SSL certificates can be provisioned using  ACM (AWS Certificate Manager) or CLI
 - Must configure SG with allowing port 443
 - Redirect HTTP to HTTPS:
-  - Instances can be configured to redirect traffic
-  - Or ALB can be configured with a rule as well
-  - Health checks should ne be redirected from the ALB
+    - Instances can be configured to redirect traffic
+    - Or ALB can be configured with a rule as well
+    - Health checks should ne be redirected from the ALB
 
 ## EB CLI
 
