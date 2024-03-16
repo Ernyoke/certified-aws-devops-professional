@@ -19,6 +19,7 @@
     - [AWS CloudFormation](02-configuration-management-and-iac/cloudformation.md)
     - [AWS Service Catalog](02-configuration-management-and-iac/service-catalog.md)
     - [Elastic Beanstalk](02-configuration-management-and-iac/eb.md)
+    - [AWS SAM - Serverless Application Model](02-configuration-management-and-iac/sam.md)
     - [Serverless - AWS Lambda Functions, Step Functions and API Gateway](02-configuration-management-and-iac/serverless.md)
     - [ECS - Elastic Container System](02-configuration-management-and-iac/ecs.md)
     - [AWS OpsWorks](02-configuration-management-and-iac/opsworks.md)
