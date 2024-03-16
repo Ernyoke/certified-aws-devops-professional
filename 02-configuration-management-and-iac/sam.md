@@ -25,7 +25,7 @@
 - To run a SAM application locally we can use the SAM cli
 - It helps us locally build and debug serverless applications
 - SAM has support for IDEs: VSCOde, JetBrains Intellij/PyCharm, AWS Cloud9, etc.
-- AWS Toolkits: IDE plugins which allows us to build, test, debug and deploy Lambda functions using AWS SAM
+- AWS Toolkit: IDE plugins which allows us to build, test, debug and deploy Lambda functions using AWS SAM
 
 ## SAM CLI Commands
 
@@ -62,9 +62,17 @@
 
 ## SAM with CodeDeploy
 
-- SAM has builtin support for CodeDeploy
-- SAM can do the following things when deploying:
-    - Deploy the new version and automatically create aliases that point to the new version
-    - Gradually shift customer traffic to the new version until we are satisfied that the function works as expected
-    - We can define pre-traffic and post-traffic test functions to verify than the newly deployed code is configured correctly
-    - SAM can roll back the deployment if CloudWatch alarms are triggered
+- SAM framework natively uses CodeDeploy to update/deploy Lambda functions
+- CodeDeploy will leverage the Traffic Shifting feature using Lambda aliases
+- Pre and Post traffic hooks can be defined to validate deployment
+- Automated rollbacks are supported with CloudWatch Alarms
+- SAM with CodeDeploy YAML configuration:
+    - `AutoPublishAlias`:
+        - Detects when new code is being deployed
+        - Creates and publishes an updated version of the function with the latest code
+        - Points the alias to the updated version of the Lambda function
+    - `DeploymentPreference`: `Canary`, `Linear`, `AllAtOnce`
+    - `Alarms`:
+        - Can trigger a rollback
+    - `Hooks`:
+        - Pre and post traffic shifting Lambda functions used to test the deployment
