@@ -57,6 +57,22 @@
 - Using the elastic beanstalk console, we can "swap URLs" when with the testing environment
 - This is a manual feature, it's not directly embedded in EB
 
+### Traffic Splitting
+
+- Used for Canary Testing - a new application version is deployed to a temporary ASG with the same capacity. A small percentage of the traffic is sent to the temporary ASG for a configurable amount of time
+- Deployment health is monitored
+- If there is a deployment failure, an automated rollback is triggered
+- No application downtime will happen
+- In case of success, new instances are migrated from the temporary to the original ASG and the old application version is terminated
+- Traffic Splitting deployment is automated
+
+### Elastic Beanstalk Deployment Summary
+
+- Documentation: [https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.deploy-existing-version.html](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.deploy-existing-version.html)
+
+![EB Deployment Summary](images/deployment-summary.png)
+
+
 ## Elastic Beanstalk Lifecycle Policy
 
 - Elastic Beanstalk can store at most 1000 application versions
@@ -74,19 +90,19 @@
 - A zip file containing our code must be deployed to Elastic Beanstalk
 - All the parameters set in the UI can be configured with code using files
 - Requirements:
-    - in the .ebextensions/ directory in the root of source code
+    - in the `.ebextensions/` directory in the root of source code
     - YAML / JSON format
-    - .config extensions (example: logging.config)
+    - `.config` extensions (example: `logging.config`)
     - Able to modify some default settings using: option_settings
     - Ability to add resources such as RDS, ElastiCache, DynamoDB, etc...
-- Resources managed by .ebextensions get deleted if the environment goes away
-- The .ebextensions folder goes to the root of our project
+- Resources managed by `.ebextensions` get deleted if the environment goes away
+- The `.ebextensions` folder goes to the root of our project
 
 ## Elastic Beanstalk Under the Hood
 
 - Elastic Beanstalk uses CloudFormation under the hood
 - We can take advantage of this by provisioning other resources from beanstalk
-- We can place config files in the .ebextensions to provision basically anything we want
+- We can place config files in the `.ebextensions` to provision basically anything we want
 
 ## Elastic Beanstalk Cloning and Migrations
 
@@ -114,7 +130,7 @@
 
 - We can run docker container if we provide:
     - Dockerfile: EB will build an run the Docker container
-    - Dockerrun.aws.json (v1): describe where the Docker image should be downloaded from (DockerHub, ECR, etc.)
+    - `Dockerrun.aws.json` (v1): describe where the Docker image should be downloaded from (DockerHub, ECR, etc.)
 - EB in single container mode wont use ECS!
 - Multi Docker Container:
     - Will run multiple containers per EC2 instance
@@ -123,8 +139,8 @@
         - EC2 instances in an ECS cluster
         - Load Balancer (high availability mode)
         - Task definition and execution
-    - Requires a config of Dockerrun.aws.json (V2) in the root of the source code
-        - Dockerrun.aws.json is used to generate the ECS task definition
+    - Requires a config of `Dockerrun.aws.json` (V2) in the root of the source code
+        - `Dockerrun.aws.json` is used to generate the ECS task definition
         - Docker images should be pre-build and stored in ECR, DockerHub, etc.
 
 ## Elastic Beanstalk and HTTPS
@@ -217,9 +233,9 @@
 - The format of a config file containing resources should be the same as a CloudFormation template
 - **If the environment is deleted, every resource will be deleted with it!**
 
-## .ebextensions Container Commands
+## `.ebextensions` Container Commands
 
-- We can specify commands in the .ebextensions files
+- We can specify commands in the `.ebextensions` files
 - There are 2 types of commands:
     - `commands`: the commands run before the application and web server are set up and the application version file is extracted
     - `container_commands`: 
@@ -241,7 +257,8 @@
 
 ## Worker Environments
 
-- Used for offloading long running workloads, example processing videos, processing cron jobs, etc.
+- If our application performs tasks that are long to complete, offload these tasks to a dedicated worker environment, for example processing videos, processing cron jobs, etc.
+- This is called *decoupling*
 - It uses SQS queues under the hood for being able to queue upcoming tasks
 - Worker environments polls the SQS queue for more work, in case of failure, the task is passed onto the DLQ
 - `cron.yml`: configuration file for the worker environment for being able to create cron jobs
@@ -251,3 +268,12 @@
 - Uses ECS cluster under the hood
 - `Dockerrun.aws.json`: EB specific json file describing how to deploy a set of Docker containers as an Elastic Beanstalk application
 - Reference: [https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/create_deploy_docker_ecs.html](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/create_deploy_docker_ecs.html)
+
+## Elastic Beanstalk Notifications
+
+- EB emits numerous notifications in EventBridge
+- We can react to the following events:
+    - *Environment Operation Status* -  create update, terminate
+    - *Other Resources Status* - ASG, ELB, EC2 instance created/deleted
+    - *Managed Update Status*
+    - *Environment Health Status* - if application health degrades to Warning/Severe
