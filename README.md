@@ -21,10 +21,11 @@
     - [Elastic Beanstalk](02-configuration-management-and-iac/eb.md)
     - [AWS SAM - Serverless Application Model](02-configuration-management-and-iac/sam.md)
     - [AWS CDK - Cloud Development Kit](02-configuration-management-and-iac/cdk.md)
-    - [Serverless - AWS Lambda Functions, Step Functions and API Gateway](02-configuration-management-and-iac/serverless.md)
     - [AWS Step Functions](02-configuration-management-and-iac/step-functions.md)
-    - [ECS - Elastic Container System](02-configuration-management-and-iac/ecs.md)
     - [AWS OpsWorks](02-configuration-management-and-iac/opsworks.md)
+3. Resilient Cloud Solutions
+    - [ECS - Elastic Container System](03-resilient-cloud-solutions/ecs.md)
+    - [Serverless - AWS Lambda Functions, Step Functions and API Gateway](03-resilient-cloud-solutions/serverless.md)
 3. Monitoring and Logging
     - [CloudTrail](03-monitoring/cloudtrail.md)
     - [AWS Kinesis](03-monitoring/kinesis.md)
@@ -79,15 +80,3 @@ It validates an examinee's ability to:
 - Number of questions: 75
 
 - Time: 190 minutes to complete the exam (with a possibility to request 30 minutes extra for non-native english speakers)
-
-## Exam Content
-
-| **Domain**                                                          | **% of Examination** |
-|---------------------------------------------------------------------|----------------------|
-| Domain 1: SDLC Automation                                           | 22%                  |
-| Domain 2: Configuration Management and Infrastructure as Code       | 19%                  |
-| Domain 3: Monitoring and Logging                                    | 15%                  |
-| Domain 4: Policies and Standards Automation                         | 10%                  |
-| Domain 5: Incident and Event Response                               | 18%                  |
-| Domain 6: High Availability, Fault Tolerance, and Disaster Recovery | 16%                  |
-| **Total**                                                           | **100%**             |
