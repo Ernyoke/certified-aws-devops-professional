@@ -23,7 +23,7 @@
     - [AWS CDK - Cloud Development Kit](02-configuration-management-and-iac/cdk.md)
     - [AWS Step Functions](02-configuration-management-and-iac/step-functions.md)
     - [AWS AppConfig](02-configuration-management-and-iac/appconfig.md)
-    - [SSM - AWS Systems Manager](02-configuration-management-and-iac/ssm.dm)
+    - [SSM - AWS Systems Manager](02-configuration-management-and-iac/ssm.md)
     - [AWS OpsWorks](02-configuration-management-and-iac/opsworks.md)
 3. Resilient Cloud Solutions
     - [ECS - Elastic Container System](03-resilient-cloud-solutions/ecs.md)
