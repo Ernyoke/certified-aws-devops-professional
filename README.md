@@ -27,7 +27,7 @@
     - [AWS OpsWorks](02-configuration-management-and-iac/opsworks.md)
 3. Resilient Cloud Solutions
     - [ECS - Elastic Container System](03-resilient-cloud-solutions/ecs.md)
-    - [Serverless - AWS Lambda Functions, Step Functions and API Gateway](03-resilient-cloud-solutions/serverless.md)
+    - [Serverless - AWS Lambda Functions API Gateway](03-resilient-cloud-solutions/serverless.md)
 4. Monitoring and Logging
     - [CloudTrail](04-monitoring/cloudtrail.md)
     - [AWS Kinesis](04-monitoring/kinesis.md)

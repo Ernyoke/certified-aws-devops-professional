@@ -43,23 +43,65 @@
 - The agent is by default installed on Amazon Linux and some Ubuntu AMIs
 - If an instance can not be controlled by the agent, the issue is probably with the agent on the IAM role is missing to allow SSM actions
 
-## Resource Groups
+## AWS Tags and Resource Groups
 
-- They are used to group resources together
+- We can add text key/value pairs to many AWS resources
+- Tags are commonly used with EC2 instances
+- Tags can be used for resource grouping, automation, cost allocation
+- AWS Resource Groups are used to create, view and manage logical groups of resources
+- They allow creation of logical groups of resources such as : 
+    - Applications
+    - Different layers of an application stack
+    - Differentiate a prod and development environment
 - There are 2 types of resource groups:
     - Tag based
     - CloudFormation stack based
 
-## SSM Run Command
+## AWS SSM Documents
 
-- Allows to run commands on instances managed by SSM
-- Commands which we would want to execute on VMs are specified in SSM Documents
+- SSM Documents are written in JSON or YAML
+- In SSM Documents we define parameters and actions. Documents are then executed by a specific service
 - Documents are either managed by AWS or created and managed by users
 - Documents can be 4 different types:
     - Command
     - Automation
     - Policy
     - Session
+- Example of AWS SSM Document:
+
+```yaml
+schemaVersion: "2.2"
+description: "Hello World"
+parameters: 
+    parameters: 
+        type: "String"
+        description: "Some text to print"
+        default: "none"
+mainSteps: 
+    - 
+        action: "aws:runShellScript"
+        name: "runShellScript"
+        inputs: 
+            workingDirectory: "{{.}}"
+            runCommand:
+            - "echo 'hello world'"
+            - "echo {{ parameters }}"
+```
+
+- AWS Documents are used to run commands with SSM Run Command
+- They are also used with State Manager, Patch Manager, Automation
+- AWS Documents can retrieve data from Parameter Store
+
+## SSM Run Command
+
+- Used for execute documents (scripts) or just to run simple commands
+- Commands are executed across multiple instances (using resource groups)
+- Documents are either managed by AWS or created and managed by users
+- Run Command has builtin rate control/error control - progressively roll out commands to instances, in case of errors stop executing commands
+- Integrates with IAM and CloudTrail
+- SSM Run Command requires no SSH access to instances
+- The output of the command can be shown in the AWS SSM Run Command Console, or it can be sent to an S3 bucket or to CloudWatch Logs
+- Run Command can be evoked with Even Bridge
 
 ## SSM Parameter Store
 

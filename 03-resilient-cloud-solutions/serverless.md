@@ -1,4 +1,4 @@
-# Serverless - AWS Lambda Functions, Step Functions and API Gateway
+# Serverless - AWS Lambda Functions and API Gateway
 
 ## Serverless Introduction
 
