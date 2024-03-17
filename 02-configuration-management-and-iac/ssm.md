@@ -1,6 +1,6 @@
 # SSM - AWS Systems Manager
 
-- Used for manage EC2 and on-premise systems at scale
+- Used for managing a fleet of EC2 instances and on-premise systems at scale
 - Offers operational insights about the state of the infrastructure
 - Provides easy problem detection
 - Offers patching automation for enhanced compliance
@@ -10,30 +10,38 @@
 
 ## SSM Features
 
-- Resource Groups
-- Insights:
-    - Insights Dashboard
-    - Inventory: discover and audit the software installed
+- **Resource Groups**
+- Operations Management:
+    - Explorer
+    - OpsCenter
+    - CloudWatch Dashboard
+- Shared Resources:
+    - **Documents**
+- Change Management:
+    - Change Manager
+    - **Automation**
+    - Change Calendar
+    - **Maintenance Windows**
+- Application Management:
+    - Application Manager
+    - AppConfig
+    - **Parameter Store**
+- Node Management:
+    - Fleet Manager
     - Compliance
-- Parameter Store
-- Action:
-    - Automation: shut down EC2, create AMIs
-    - Run Command
-    - Session Manager
-    - Patch Manager
-    - Maintenance Windows
-    - State Manager: define and maintain configuration of OS an applications
+    - **Inventory**
+    - Hybrid Activations
+    - **Session Manager**
+    - **Run Command**
+    - **State Manager**
+    - **Patch Manager**
+    - Distributor
 
 ## How Systems Manager Works?
 
 - We need to install the SSM agent on the systems we want to control
 - The agent is by default installed on Amazon Linux and some Ubuntu AMIs
 - If an instance can not be controlled by the agent, the issue is probably with the agent on the IAM role is missing to allow SSM actions
-- SSM Hybrid Activation: [https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances.html])(https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances.html)
-    - Used form setup on-premise instances in order to be managed by SSM
-    - When a hybrid activation is created, SSM provides an **Activation Code** and an **Activation ID** which will be used to set up the SSM agent on the on-premise instance
-    - The instance id for EC2 instances starts with `i-` and for on-premise instances it starts with `mi-`
-    - Managed on-premise instances can be tagged in SSM
 
 ## Resource Groups
 
@@ -178,4 +186,10 @@
     - All commands are logged to S3/CloudWatch
     - Access to Secure Shell is done through User IAM, not SSH keys
 
+## SSM Hybrid Activations
 
+- SSM Hybrid Activations: [https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances.html](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances.html)
+    - Used form setup on-premise instances in order to be managed by SSM
+    - When a hybrid activation is created, SSM provides an **Activation Code** and an **Activation ID** which will be used to set up the SSM agent on the on-premise instance
+    - The instance id for EC2 instances starts with `i-` and for on-premise instances it starts with `mi-`
+    - Managed on-premise instances can be tagged in SSM
