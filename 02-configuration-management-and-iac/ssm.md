@@ -103,15 +103,44 @@ mainSteps:
 - The output of the command can be shown in the AWS SSM Run Command Console, or it can be sent to an S3 bucket or to CloudWatch Logs
 - Run Command can be evoked with Even Bridge
 
+## SSM Automation
+
+- Systems Manager Automation simplifies common maintenance and deployment tasks of Amazon EC2 instances and other AWS resources. Automation enables to do the following:
+    - Build automations to configure and manage instances and AWS resources
+    - Create custom runbooks or use pre-defined runbooks maintained by AWS
+    - Receive notifications about Automation tasks and runbooks by using Amazon EventBridge
+    - Monitor Automation progress and details by using the AWS Systems Manager console
+- Automation Runbook:
+    - SSM Documents of type Automation
+    - Define actions to be performed on our EC2 instances or other AWS resources
+    - Runbooks may be pre-defined (by AWS) or custom
+- Automation can be triggered:
+    - Manually by using the AWS console, AWS CLI or SDK
+    - By Amazon EventBridge
+    - On schedule using Maintenance Windows
+    - By AWS Config rules remediations
+- Automation use cases:
+    - Perform common IT tasks:
+        - Use the `AWS-StopEC2InstanceWithApproval` runbook to request that one or more AWS Identity and Access Management (IAM) users approve the instance stop action. After the approval is received, Automation stops the instance
+        - Use the `AWS-StopEC2Instance` runbook to automatically stop instances on a schedule by using Amazon EventBridge or by using a maintenance window task
+        - Use the `AWS-UpdateCloudFormationStackWithApproval` runbook to update resources that were deployed by using CloudFormation template. The update applies a new template
+    - Safely perform disruptive tasks in bulk:
+        - Use the `AWS-RestartEC2InstanceWithApproval` runbook to target an AWS resource group that includes multiple instances
+    - Simplify complex tasks:
+        - Use the `AWS-UpdateLinuxAmi` and `AWS-UpdateWindowsAmi` runbooks to create golden AMIs from a source AMI. We can run custom scripts before and after updates are applied. We can also include or exclude specific packages from being installed
+        - Use the `AWSSupport-ExecuteEC2Rescue` runbook to recover impaired instances. An instance can become unreachable for a variety of reasons, including network misconfigurations, RDP issues, or firewall settings
+    - Enhance operations security
+- WhitePaper: Building a Secure, Approved AMI Factory Process Using Amazon EC2 Systems Manager (SSM), AWS Marketplace, and AWS Service Catalog [https://d1.awsstatic.com/whitepapers/aws-building-ami-factory-process-using-ec2-ssm-marketplace-and-service-catalog.pdf](https://d1.awsstatic.com/whitepapers/aws-building-ami-factory-process-using-ec2-ssm-marketplace-and-service-catalog.pdf)
+
 ## SSM Parameter Store
 
 - Used for securely storing configuration and secrets in AWS
 - It can have optional encryption using KMS
 - Serverless, scalable, durable, easy SDK
 - Version tracking of configurations and secrets
-- Configuration management using IAM policies
-- Notification with CloudWatch events
-- Integration with CloudFormation
+- Configuration management happens using IAM policies
+- We get notification with Amazon EventBridge
+- Has full integration with CloudFormation
 
 ### SSM Parameter Store Hierarchy
 
@@ -128,21 +157,20 @@ mainSteps:
         - other-app
     - /other-department
 
-### SSM Tiers
+### SSM Parameter Tiers
 
-- Standard:
+- **Standard**:
     - Total number of parameters: 10K
     - Max size of a parameter: 4KB
     - Pricing: free
-    - Parameter policies: NO
-
-- Advanced:
+    - **Parameter policies: NO**
+- **Advanced**:
     - Total number of parameters: 100K
     - Max size of a parameter: 8KB
     - Pricing: 0.05$ per advanced parameter per month
-    - Parameter policies: YES
+    - **Parameter policies: YES**
 
-### Policies for Advanced Parameters
+### SSM Parameters Policies for Advanced Parameters
 
 - Allow assigning a TTL for a parameter to force updating or deleting sensitive data
 - We can assign multiple policies at a time
@@ -166,13 +194,25 @@ mainSteps:
 
 ## SSM Patch Manager
 
-- Used to automatically patch running instances
-- Predefined patch baselines: defined by AWS, tells Patch Manager how to patch by default a given OS
-- Custom baseline: 
-    - We can create our own list of patches which can be applied to a fleet
-    - We can set up rules for patching, we can create a list of approved and rejected patches
-    - We can set up manual approval for patches
-    - Patch sources: we can add a repository for being able to distribute patches
+- Used to automatically patch running instances with OS updates, application updates, security patches, etc.
+- Patching can happen on-demand or on a schedule with Maintenance Windows
+- Patch Baselines: 
+    - Defines which patches should and should not be installed on an instance
+    - We have the ability to create custom Patch Baselines
+    - Patches can be auto-approved withing days of their release
+    - By default, only critical patches and security patches are installed
+- Patch Groups:
+    - We can associate a set of instances with a specific Patch Baseline
+    - Instances should defined with the tag key `Patch Group`
+    - An instance can only be part of one Patch Group
+    - A Patch Group can only be registered with one Patch Baseline
+- Patch Baseline types:
+    - Pre-defined Patch Baseline:
+        - Managed by AWS for different Operating Systems
+        - `AWS-RunPatchBaseline` SSM Document can be used to run a Patch Baseline
+    - Custom Patch Baseline:
+        - We can create our own Patch Baseline and choose which patches to auto-approve
+        - We can specify custom and alternative patch repositories
 
 ## Maintenance Windows
 
@@ -193,26 +233,6 @@ mainSteps:
     - Instance Detail Information
     - Services
     - Etc.
-
-## AWS Systems Manager Automation
-
-- Systems Manager Automation simplifies common maintenance and deployment tasks of Amazon EC2 instances and other AWS resources. Automation enables to do the following:
-    - Build automations to configure and manage instances and AWS resources
-    - Create custom runbooks or use pre-defined runbooks maintained by AWS
-    - Receive notifications about Automation tasks and runbooks by using Amazon EventBridge
-    - Monitor Automation progress and details by using the AWS Systems Manager console
-- Automation use cases:
-    - Perform common IT tasks:
-        - Use the `AWS-StopEC2InstanceWithApproval` runbook to request that one or more AWS Identity and Access Management (IAM) users approve the instance stop action. After the approval is received, Automation stops the instance
-        - Use the `AWS-StopEC2Instance` runbook to automatically stop instances on a schedule by using Amazon EventBridge or by using a maintenance window task
-        - Use the `AWS-UpdateCloudFormationStackWithApproval` runbook to update resources that were deployed by using CloudFormation template. The update applies a new template
-    - Safely perform disruptive tasks in bulk:
-        - Use the `AWS-RestartEC2InstanceWithApproval` runbook to target an AWS resource group that includes multiple instances
-    - Simplify complex tasks:
-        - Use the `AWS-UpdateLinuxAmi` and `AWS-UpdateWindowsAmi` runbooks to create golden AMIs from a source AMI. We can run custom scripts before and after updates are applied. We can also include or exclude specific packages from being installed
-        - Use the `AWSSupport-ExecuteEC2Rescue` runbook to recover impaired instances. An instance can become unreachable for a variety of reasons, including network misconfigurations, RDP issues, or firewall settings
-    - Enhance operations security
-- WhitePaper: Building a Secure, Approved AMI Factory Process Using Amazon EC2 Systems Manager (SSM), AWS Marketplace, and AWS Service Catalog [https://d1.awsstatic.com/whitepapers/aws-building-ami-factory-process-using-ec2-ssm-marketplace-and-service-catalog.pdf](https://d1.awsstatic.com/whitepapers/aws-building-ami-factory-process-using-ec2-ssm-marketplace-and-service-catalog.pdf)
 
 ## AWS Session Manager
 
