@@ -234,9 +234,9 @@ mainSteps:
     - Services
     - Etc.
 
-## AWS Session Manager
+## SSM Session Manager
 
-- Allows to start a secure shell on a VM
+- Allows to start a secure shell on a VM (EC2 or on-premises)
 - **Does not use SSH access and bastion hosts**
 - Only works for EC2 for now
 - Log actions done through secure shells to S3 and CloudWatch Logs
@@ -247,11 +247,68 @@ mainSteps:
     - No need fot a bastion host
     - All commands are logged to S3/CloudWatch
     - Access to Secure Shell is done through User IAM, not SSH keys
+- IAM Permissions:
+    - Control which user/groups can access Session Manager and to which instance they can connect
+    - We can use tags to restrict access to only specific EC2 instances
+- Optionally, we can restrict commands an user can run in a session
+- SSM Session Manager with VPC Endpoints:
+    - Used to connect to EC2 instances which are in a private subnet without internet access
+    - Required endpoints and ports:
+        - `com.amazonaws.region.ssm` to allow Inbound 443
+        - `com.amazonaws.region.ssmmessages` to allow Inbound 443
+        - For the EC2 instance we must allow Outbound 443
+        - In case of KMS usage we need a VPC endpoint for `com.amazonaws.region.kms`
+        - For CloudWatch Logs we need a VPC endpoint for `com.amazonaws.region.logs`
+        - In case of S3 usage we can use a VPC Gateway Endpoint for `com.amazonaws.region.s3` (requires route table update)
 
-## SSM Hybrid Activations
+## SSM Default Host Management Configuration (DHMC)
 
-- SSM Hybrid Activations: [https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances.html](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances.html)
-    - Used form setup on-premise instances in order to be managed by SSM
-    - When a hybrid activation is created, SSM provides an **Activation Code** and an **Activation ID** which will be used to set up the SSM agent on the on-premise instance
-    - The instance id for EC2 instances starts with `i-` and for on-premise instances it starts with `mi-`
-    - Managed on-premise instances can be tagged in SSM
+- When it is enabled, it automatically configures our EC2 instances as managed instances without the use of EC2 Instance Profile (without IAM role)
+- Requires an **Instance Identity Role**: a type of IAM role with no permission beyond identifying the EC2 instance to AWS Services such as Systems Manager
+- EC2 instances must have **IMDSv2 enabled** and **SSM Agent installed**
+- Once the system is managed by SSM, this will automatically enable Session Manager, Patch Manager and Inventory
+- This service must be enabled per AWS region
+
+## SSM Hybrid Environments (Hybrid Activations)
+
+- We can use SSM to manage on-premises servers, IoT devices, edge devices and virtual machines (example VMs provided by other cloud providers)
+- It requires from us to create a Hybrid Activation
+- When a Hybrid Activation is created, SSM provides an **Activation Code** and an **Activation ID** which will be used to set up the SSM agent on the on-premise instance
+- The instance id for EC2 instances starts with `i-` and for on-premise instances it starts with `mi-`
+- Managed on-premise instances can be tagged in SSM
+
+## IoT Greengrass Instance Activation
+
+- We can manage IoT Greengrass Core devices using SSM
+- We have to install SSM Agent on Greengrass Core devices, they will register themselves as managed node in SSM
+- SSM Agent can be installed manually or deployed as a Greengrass Component (pre-built software module that we deploy directly to Greengrass Core devices)
+- Once the SSM Agent is installed on the device, we must define a Token Exchange Role (IAM Role for IoT core devices)
+- We must add permission to the Token Exchange Role to communicate with SSM
+- Use cases: easily update and maintain OS and software updates across a fleet of Greengrass Core devices
+
+## SSM Automations - Use Cases
+
+- Reduce costs by automatically start and stop EC2 instances and RDS DB instances
+- Reduce costs by automatically downsize EC2 instances and RDS DB instances
+- Build a golden AMI (EC2 Image Builder is a better option)
+- SSM Automations is integrated with AWS Config => remediate non-compliant resources
+
+## SSM Compliance
+
+- Used for scanning our fleet of managed nodes for patch compliance and configuration inconsistencies
+- Displays current data about:
+    - Patches in Patch Manager
+    - Associations in State Manager
+- Compliance data can be aggregated across multiple accounts/regions by syncing data to an S3 bucket using Resource Data Sync. This data can be analyzed by Athena and QuickSight
+- Compliance can be sent do Security Hub
+
+## SSM OpsCenter
+
+- Allows us to view, investigate and remediate issues in one place (we don't need to navigate across different AWS services)
+- Contains: security issues, performance issues (example DynamoDB throttle), failures (example ASG failed to launch an instance)
+- The goal of OpsCenter is to reduce the meantime to resolve issues
+- OpsCenter contains **OpsItems**:
+    - Operational issues or interruptions that need investigation and remediation
+    - These can be events, resources, AWS Config changes, CloudTrail logs, etc.
+    - Provides recommended Runbooks to resolve issues
+- Supports both EC2 instances and on-premises managed nodes

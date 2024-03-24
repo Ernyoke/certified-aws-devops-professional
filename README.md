@@ -37,7 +37,6 @@
     - [Tagging Strategies](04-monitoring/tagging.md)
 5. Policies and Standards Automation
     - [AWS Config](05-automation/config.md)
-    - [AWS Service Catalog](05-automation/service-catalog.md)
     - [Amazon Inspector](05-automation/inspector.md)
     - [EC2 Instance Compliance](05-automation/ec2-instance-compliance.md)
     - [Health](05-automation/health.md)
