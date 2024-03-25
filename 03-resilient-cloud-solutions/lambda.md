@@ -66,6 +66,28 @@
 - It has integration with KMS for being able to encrypt secrets
 - We can use SSM Parameter Manager as well for storing environment variables and secrets
 
+## AWS Lambda Concurrency and Throttling
+
+- Concurrency limit per account per region: by default up to 1000 concurrent execution
+- In case we a higher amount of concurrent execution for our account, we can open a support ticket
+- *Reserved concurrency*: 
+    - Used to guarantee that a certain amount of concurrency is available for your function at any time
+    - It is the maximum number of concurrent instances that we want to allocate to our function
+    - When we dedicate reserved concurrency to a function, no other function can use that concurrency. This can impact the concurrency pool available to other functions
+    - Each invocation over the concurrency limit will trigger a throttle
+    - Throttle behavior:
+        - Synchronous invocation: return ThrottleError - 429
+        - Asynchronous invocation: retry automatically and then go to the DLQ
+- *Provisioned concurrency*:
+    - It is the number of pre-initialized execution environments allocated to a function
+    - These execution environments are ready to respond immediately to incoming function requests (avoiding cold starts)
+    - Configuring provisioned concurrency incurs additional charges to our AWS account
+    - Application Auto Scaling can manage concurrency (based on schedule or target utilization)
+- Concurrency and Asynchronous invocations:
+    - If the function does not have enough concurrency available to process all events, additional requests are throttled
+    - For throttling errors (429) and system errors (5xx) Lambda returns the event to the queue and attempts to run the function again for up to 6 hours 
+    - The retry interval increases exponentially from 1 second after the first attempt to a maximum of 5 minutes
+
 ## AWS Lambda Limits - Per Region
 
 - Execution:
