@@ -1,5 +1,7 @@
 # AWS OpsWorks
 
+- **OpsWorks is retired in May 2024, but it is still part of the exam guide!**
+
 - OpsWorks provides 3 different services:
     - OpsWorks Stacks
     - OpsWorks for Chef Automate

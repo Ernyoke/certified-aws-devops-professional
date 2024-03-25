@@ -27,10 +27,14 @@
     - [AWS OpsWorks](02-configuration-management-and-iac/opsworks.md)
 3. Resilient Cloud Solutions
     - [ECS - Elastic Container System](03-resilient-cloud-solutions/ecs.md)
-    - [Serverless - AWS Lambda Functions API Gateway](03-resilient-cloud-solutions/serverless.md)
+    - [AWS Lambda Functions](03-resilient-cloud-solutions/lamdba.md)
+    - [AWS API Gateway](03-resilient-cloud-solutions/api-gw.md)
+    - [AWS Kinesis](03-resilient-cloud-solutions/kinesis.md)
+    - [Auto Scaling Groups](03-resilient-cloud-solutions/asg.md)
+    - [DynamoDB](03-resilient-cloud-solutions/dynamodb.md)
+    - [Amazon S3](03-resilient-cloud-solutions/s3.md)
 4. Monitoring and Logging
     - [CloudTrail](04-monitoring/cloudtrail.md)
-    - [AWS Kinesis](04-monitoring/kinesis.md)
     - [CloudWatch](04-monitoring/cloudwatch.md)
     - [AWS X-Ray](04-monitoring/x-ray.md)
     - [Amazon ElasticSearch (Amazon ES)](04-monitoring/elasticsearch.md)
@@ -47,9 +51,6 @@
     - [Cost Allocation Tags](05-automation/cost-allocation-tags.md)
     - [AWS Data Protection](05-automation/data-protection.md)
 6. High Availability, Fault Tolerance and Disaster Recovery
-    - [Auto Scaling Groups](05-fault-tolerance/asg.md)
-    - [DynamoDB](06-fault-tolerance/dynamodb.md)
-    - [Amazon S3](06-fault-tolerance/s3.md)
     - [Multi AZ and Multi Region in AWS](06-fault-tolerance/multi-az-region.md)
     - [Disaster Recovery](06-fault-tolerance/disaster-recovery.md)
     - [AWS Organizations](06-fault-tolerance/organizations.md)
