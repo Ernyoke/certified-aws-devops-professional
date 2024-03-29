@@ -88,18 +88,24 @@
     - For throttling errors (429) and system errors (5xx) Lambda returns the event to the queue and attempts to run the function again for up to 6 hours 
     - The retry interval increases exponentially from 1 second after the first attempt to a maximum of 5 minutes
 
+## File System Mounting
+
+- Lambda functions can access EFS File systems if they are running in a VPC
+- We have to configure Lambda to mount the EFS file system to a local directory during initialization. We must leverage EFS Access Points to accomplish the mounting
+- Limitations: each new Lambda execution will have a new connection to the EFS Access Point, we should watch our for connection limits and connection burst limits
+
 ## AWS Lambda Limits - Per Region
 
 - Execution:
-    - Memory allocation: 128 MB - 3008 MB (64 MB increments)
+    - Memory allocation: 128 MB - 10240 MB (1 MB increments)
     - Maximum execution time: 900 seconds (15 minutes)
     - Environment variables: 4 KB
-    - Disk capacity in the function container (`/tmp`): 512 MB
-    - Concurrent executions: 1000 per account (can be increased after a request)
+    - Disk capacity in the function container (`/tmp`): Between 512 MB and 10240 MB (1-MB increments)
+    - Concurrent executions: 1000 per account per region (can be increased after a request)
 - Deployment:
     - Lambda function deployment size (compressed.zip): 50 MB
-    - Uncrompressed deployment size: 250 MB
-    - We can use `/tmp` directory to load other files at the startup
+    - Unzipped deployment size: 250 MB
+    - Container image: 10 GB
 
 ## AWS Lambda@Edge
 

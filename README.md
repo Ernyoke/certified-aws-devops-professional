@@ -28,7 +28,7 @@
 3. Resilient Cloud Solutions
     - [ECS - Elastic Container System](03-resilient-cloud-solutions/ecs.md)
     - [AWS Lambda Functions](03-resilient-cloud-solutions/lamdba.md)
-    - [AWS API Gateway](03-resilient-cloud-solutions/api-gw.md)
+    - [Amazon API Gateway](03-resilient-cloud-solutions/api-gw.md)
     - [AWS Kinesis](03-resilient-cloud-solutions/kinesis.md)
     - [Auto Scaling Groups](03-resilient-cloud-solutions/asg.md)
     - [DynamoDB](03-resilient-cloud-solutions/dynamodb.md)
