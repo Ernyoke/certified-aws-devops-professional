@@ -68,25 +68,74 @@
 - REST API request validation:
     - We can configure API Gateway to perform basic validation on a API request before proceeding with the integration request
     - When the validation fails, API Gateway immediately fails the request and returns a 4xx error code
-    - This reduces unnecessary calls to the backed 
+    - This reduces unnecessary calls to the backed
+
+## API Gateway - Caching
+
+- Caching reduces the number of calls made to the backend
+- In case of request, API Gateway checks if a result was already cached and returns that if it exists, otherwise the request if forwarded to the backend
+- Default TTL (time to live) is 300 second (min is 0, max is 3600)
+- Cached as defined per stage
+- It is possible to override cache settings per method
+- The cache is encrypted
+- The capacity of the cache is between 0.5 GB to 237 GB
+- Cache is expensive, it makes sense to use it only in production
+- Cache invalidation:
+    - Cache can be entirely invalidated from the UI
+    - Clients can invalidate the cache with the header `Cache-Control: max-age=0` (with proper IAM authorization)
+    - If we don't impose an InvalidateCache policy (or choose the Require authorization check box in the console), any client can invalidate the API cache
 
 ## API Gateway - Canary Deployments
 
 - There is a possibility to enable canary deployments for any stage in API Gateway
 - We can choose the percentage of the traffic the canary channel receives
+- Metrics and logs are separated for the canary for better monitoring
+- We have the possibility to override stage variables for canary
+
+## API Gateway - Logging and Tracing
+
+- We can enable CloudWatch Logs for API Gateway:
+    - Log entries contain information about the request/response body
+    - We can enable CloudWatch logging at the stage level (with the log level)
+    - We can override this setting per API basis
+- X-Ray:
+    - We can enable it to get extra information about requests in API Gateway
+    - X-Ray with API Gateway + AWS Lambda give us a full picture for tracing an request
+- CloudWatch Metrics can be used to monitor the API Gateway:
+    - Metrics are per stage, we have the possibility to enable detailed metrics
+    - Important Metics:
+        - `CacheHitCount`, `CacheMissCount`: efficiency rate of the cache
+        - `Count`: total number of API requests in a period
+        - `IntegrationLatency`: time between when the API Gateway relays a request to the backend and when it receives a response from the backend
+        - `Latency`: IntegrationLatency + the API Gateway overhead. **Max amount of time the API Gateway can perform a request is 29 seconds!**
+        - `4XXError` & `5XXError`
 
 ## API Gateway - Throttling
 
-- API Gateway limits the steady-stage request rate to 10K per second by default
-- This limit applies to all API from an account
+- Account Limits:
+    - API Gateway limits the steady-stage request rate to 10K per second by default
+    - Soft limit, can be increased on request
+    - This limit applies to all APIs from an account
 - If request is throttled, API Gateway returns HTTP error `429 Too Many Requests`
-- API Gateway Usage Plan:
+- We can set stage limits and method limits to improve performance
+- We can define an API Gateway Usage Plan to throttle per customer:
     - Helps meter API usage
     - Helps throttle some or every method from a stage
-- Usage plans can be associated with an API key
+- Usage plans can be associated with one or more API keys
+
+## API Gateway - Errors
+
+- 4xx means client errors:
+    - 400: Bad Request
+    - 403: Access Denied, WAF filtered request
+    - 429: Quota exceeded, Throttled
+- 5xx means server errors:
+    - 502: Bad Gateway, usually we receive it for an incompatible output returned form a Lambda proxy integration and occasionally for out-of-order invocations due to heavy loads
+    - 503: Service Unavailable
+    - 504: Integration Failure, example the request of the backed timed out
 
 ## Fronting Step Functions
 
 - API Gateway can expose step functions
-- We we expose a step function, we must select an Action for it (example: StartExecution)
+- When we expose a step function, we must select an Action for it (example: StartExecution)
 - We also require a step execution role
