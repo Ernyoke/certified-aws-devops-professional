@@ -126,13 +126,13 @@
 ## API Gateway - Errors
 
 - 4xx means client errors:
-    - 400: Bad Request
-    - 403: Access Denied, WAF filtered request
-    - 429: Quota exceeded, Throttled
+    - `400`: Bad Request
+    - `403`: Access Denied, WAF filtered request
+    - `429`: Quota exceeded, Throttled
 - 5xx means server errors:
-    - 502: Bad Gateway, usually we receive it for an incompatible output returned form a Lambda proxy integration and occasionally for out-of-order invocations due to heavy loads
-    - 503: Service Unavailable
-    - 504: Integration Failure, example the request of the backed timed out
+    - `502`: Bad Gateway, usually we receive it for an incompatible output returned form a Lambda proxy integration and occasionally for out-of-order invocations due to heavy loads
+    - `503`: Service Unavailable
+    - `504`: Integration Failure, example the request of the backed timed out
 
 ## Fronting Step Functions
 
