@@ -147,3 +147,12 @@
     - We get application backups: implemented as checkpoints and snapshots
 - Flink is a lot more powerful than a simple SQL query language
 - Flink does not supports reading data from Firehose (use Kinesis Analytics for SQL instead)
+
+## Machine Learning on Kinesis Data Analytics
+
+- Kinesis Data Analytics provides 2 machine learning algorithms:
+    - `RANDOM_CUT_FOREST`:
+        - It is a SQL function used for anomaly detection on numeric columns in a stream
+        - Uses the recent history to compute and train the model
+    - `HOTSPOTS`:
+        - Locate and return information about relatively dense regions in our data
