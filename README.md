@@ -41,21 +41,21 @@
     - [AWS X-Ray](04-monitoring-and-logging/x-ray.md)
     - [Amazon ElasticSearch (Amazon ES)](04-monitoring-and-logging/elasticsearch.md)
     - [Tagging Strategies](04-monitoring-and-logging/tagging.md)
-5. Policies and Standards Automation
-    - [Amazon Inspector](05-incident-and-event-response/inspector.md)
-    - [EC2 Instance Compliance](05-incident-and-event-response/ec2-instance-compliance.md)
+5. Incident and Event Response
     - [Health](05-incident-and-event-response/health.md)
-    - [Amazon Macie](05-incident-and-event-response/macie.md)
-    - [Secrets and License Manager](05-incident-and-event-response/manager.md)
-    - [Cost Allocation Tags](05-incident-and-event-response/cost-allocation-tags.md)
-    - [AWS Data Protection](05-incident-and-event-response/data-protection.md)
-6. High Availability, Fault Tolerance and Disaster Recovery
+    - [Multi AZ and Multi Region in AWS](05-incident-and-event-response/multi-az-region.md)
+    - [Disaster Recovery](05-incident-and-event-response/disaster-recovery.md)
+6. Security and Compliance
+    - [Amazon Inspector](06-security-and-compliance/inspector.md)
     - [AWS Config](06-security-and-compliance/config.md)
     - [GuardDuty](06-security-and-compliance/guard-duty.md)
     - [Trusted Advisor](06-security-and-compliance/trusted-advisor.md)
-    - [Multi AZ and Multi Region in AWS](06-security-and-compliance/multi-az-region.md)
-    - [Disaster Recovery](06-security-and-compliance/disaster-recovery.md)
     - [AWS Organizations](06-security-and-compliance/organizations.md)
+    - [AWS Data Protection](06-security-and-compliance/data-protection.md)
+    - [EC2 Instance Compliance](06-security-and-compliance/ec2-instance-compliance.md)
+    - [Cost Allocation Tags](06-security-and-compliance/cost-allocation-tags.md)
+    - [Secrets and License Manager](06-security-and-compliance/manager.md)
+    - [Amazon Macie](06-security-and-compliance/macie.md)
 
 ## Exam Description
 
