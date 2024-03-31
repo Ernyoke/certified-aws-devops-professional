@@ -1,4 +1,4 @@
-# ECS - Elastic Container System
+# ECS - Elastic Container Service
 
 ## ECS Clusters
 
@@ -6,6 +6,37 @@
 - EC2 instances run the ECS agent which is a Docker container
 - The ECS agents register the instance to the ECS cluster
 - The EC2 instances run a special AMI made specifically for ECS
+
+## ECS Launch Types
+
+- EC2 Launch Type:
+    - We must provision and maintain the infrastructure (EC2 instances)
+    - Each EC2 instance must run the ECS Agent to register itself to the ECS Cluster
+    - AWS takes care to starting/stopping containers
+- Fargate Launch Type:
+    - We do not provision the infrastructure (no EC2 instances to manage)
+    - It is considered to by serverless offering
+    - We just have to create task definitions and AWS will run our containers
+
+## ECS - IAM Roles for ECS
+
+- EC2 Instance Profile (EC2 LaunchType only):
+    - Used by the ECS agent
+    - The ECS agent Makes API calls to the ECS service
+    - The ECS agent can send container logs to CloudWatch
+    - It has to pull Docker images from ECR
+    - It can reference sensitive data from Secrets Manager or SSM Parameter Store
+- ECS Task Role (valid for both EC2 and Fargate LaunchTypes):
+    - IAM Role attached to the ECS tasks
+    - Allows each task to have a specific role
+    - We can use different roles different ECS Services we run
+    - Task Roles are defined in the task definition
+
+## ECS Load Balancer Integration
+
+- Application Load Balancer is supported for most use cases
+- Network Load Balancer is recommended for high throughput/high performance use case, **or to pair with AWS PrivateLink** (used for private integration with the API Gateway)
+- Classic Load Balancer is supported but not recommended. It does not provide any advanced features and it does not support Fargate
 
 ## ECS Task Definition
 
@@ -23,24 +54,46 @@
 - They ensure that the number of tasks desired are running across fleet of EC2 instances
 - ECS services can be linked to an Elastic Load Balancer (NLB/ALB)
 
-## ECR - Elastic Container Registry
+## ECS Data Volumes (EFS)
 
-- ECR is a private Docker image repository
-- Access to ECR is controller through IAM
-- In order to push a Docker image to ECR, we have to do the following commands
-    - AWS CLI v1: `$(aws ecr get-login --no-include-email --region eu-west1)`
-    - AWS CLI V2: `aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 12345.dkr.ecr.eu-west-1.amazonaws.com`
-    - Build the image: `docker build -d demo .`
-    - Tag the image `docker tag demo:latest ...`
-    - Push the image: `docker push 1234:dkr.ecr.eu-west-1.amazonaws.com/demo:latest`
-- Pull an image from ECR:
-    - Login with the same command above
-    - Pull the image: `docker pull 1234:dkr.ecr.eu-west-1.amazonaws.com/demo:latest`
+- We can use Amazon EFS file systems to mount them to ECS tasks
+- Works with both EC2 and Fargate launch types
+- Tasks running in any AZ will share the same data in EFS file system
+- Fargate + EFS =  Serverless
+- Use cases for EFS usage: persistent multi-AZ shared storage for containers
+- Amazon S3 cannot be mounted as a file system! (sort of, this is what the exam expects)
 
-## Fargate
+## ECS - Auto Scaling
 
-- It is a serverless service for running containers in the cloud
-- We just have to create task definitions and AWS will run our containers
+- Service Auto Scaling (optional): we can configure the minimum number of tasks, maximum number of tasks and the desired number of task. It is similar to EC2 auto scaling
+- We can scale based on the following metrics:
+    - ECS Service Average CPU Utilization
+    - ECS Service Average Memory Utilization
+    - ALB Request Count Per Target - metric coming from the ALB
+- Scaling policies:
+    - **Target Tracking**: scale based on target value for a specific CloudWatch metroc
+    - **Step Scaling**: requires alarms to increase and decrease the number of tasks
+    - **Scheduled Scaling**: scale based on a predefined date/time
+- ECS Service Auto Scaling (task level) != EC2 Auto Scaling (instance level)
+- Fargate Auto Scaling is much easier to manage
+- Auto Scaling EC2 instances:
+    - We can accommodate ECS service scaling by adding new EC2 instances to the cluster
+    - This can be accomplished in multiple ways:
+        - **Auto Scaling Group Scaling**:
+            - Scale our ASG based on CPU utilization
+            - Add EC2 instances over time
+        - **ECS Cluster Capacity Provider**:
+            - Used to automatically provision and scale the infrastructure for our ECS tasks
+            - Capacity Providers are paired with Auto Scaling Groups
+            - Recommended way to scaling EC2 instances used for an ECS cluster
+
+## ECS - Integration with CloudWatch
+
+- For a task definition we can define a log drive at task creation
+- With a log driver we can integrate the task logs with CloudWatch Logs
+- For the log driver we can select the log group, log stream prefix and the AWS region
+- There is no CloudWatch agent required to be installed for ECS
+- **CloudWatch Container Insights**: sends per container metrics to CloudWatch. It collects, aggregates and summarizes compute utilization such as CPU, memory, disk, networking information
 
 ## Elastic Beanstalk + ECS
 
@@ -52,26 +105,6 @@
     - Load Balancer (in high availability mode)
     - Task definitions and execution
 - Requires a config file named **Dockerrun.aws.json** which has to be placed a the root of the source code
-
-## ECS - IAM Roles
-
-- EC2 instance: needs an EC2 service policy for being able to interact with ECS. The policy attached is usually the one managed by AWS named `AmazonEC2ContainerServiceEC2Role`
-- Task definitions can have a task role, which provides the Docker container tasks to interact with other AWS services
-
-## ECS - Auto Scaling
-
-- Service Auto Scaling (optional): we can configure the minimum number of tasks, maximum number of tasks and the desired number of task. It is similar to EC2 auto scaling
-- Scaling policies:
-    - Target tracking
-    - Step scaling: requires alarms to increase and decrease the number of tasks
-
-## ECS - Integration with CloudWatch
-
-- For a task definition we can define a log drive at task creation
-- With a log driver we can integrate the task logs with CloudWatch Logs
-- For the log driver we can select the log group, log stream prefix and the AWS region
-- There is no CloudWatch agent required to be installed for ECS
-- **CloudWatch Container Insights**: sends per container metrics to CloudWatch. It collects, aggregates and summarizes compute utilization such as CPU, memory, disk, networking information
 
 ## ECS CI/CD Pipeline
 
