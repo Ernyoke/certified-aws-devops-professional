@@ -87,13 +87,28 @@
             - Capacity Providers are paired with Auto Scaling Groups
             - Recommended way to scaling EC2 instances used for an ECS cluster
 
-## ECS - Integration with CloudWatch
+## ECS - Logging
 
-- For a task definition we can define a log drive at task creation
-- With a log driver we can integrate the task logs with CloudWatch Logs
-- For the log driver we can select the log group, log stream prefix and the AWS region
-- There is no CloudWatch agent required to be installed for ECS
-- **CloudWatch Container Insights**: sends per container metrics to CloudWatch. It collects, aggregates and summarizes compute utilization such as CPU, memory, disk, networking information
+- Logging with `awslogs` driver:
+    - Containers can send application logs directly to CloudWatch Logs
+    - We need to turn on the `awslogs` log driver for this
+    - This is done with the `logConfiguration` parameter in the Task Definition
+    - For the log driver we can select the log group, log stream prefix and the AWS region
+    - There is no CloudWatch agent required to be installed for ECS
+    - With the Fargate Launch Tpe:
+        - We have to make sure the Task Execution role has the required permissions to send logs to CloudWatch
+        - There is support for other drivers: `splunk`, `awsfirelens`
+    - With the EC2 Launch Type:
+        - We can use the CloudWatch Unified Agent and ECS Container Agent
+        - We enable logging using `ECS_AVAILABLE_LOGGING_DRIVERS` in `/etc/ecs/ecs.config`
+        - Containers in the EC2 instances must have permissions to push logs in case of CloudWatch
+- ECS Logging with Sidecar Container:
+    - Accomplished using a sidecar container which is responsible for collecting logs from all other containers and files on the file system and send those logs to a log aggregator
+
+
+## CloudWatch Container Insight
+
+- If enabled, Container Insights sends per container metrics to CloudWatch. It collects, aggregates and summarizes compute utilization such as CPU, memory, disk, networking information
 
 ## Elastic Beanstalk + ECS
 
