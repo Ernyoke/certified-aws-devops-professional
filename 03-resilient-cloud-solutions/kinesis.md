@@ -1,24 +1,49 @@
-# AWS Kinesis
+# Amazon Kinesis
 
 - Kinesis is a managed alternative to Apache Kafka
 - Great for application logs, metrics, IoT, clickstreams
 - Great for real-time big 
 - Data is automatically replicate to 3 AZs
 - Kinesis offers 3 types of services:
-    - Kinesis Streams: low latency streaming ingest at scale
-    - Kinesis Analytics: perform real-time analytics on streams using SQL
-    - Kinesis Firehose: load streams into S3, Redshift and ElasticSearch
+    - Kinesis Streams: capture, process and store data streams
+    - Kinesis Firehose: load streams into AWS data stores (S3, Redshift and OpenSearch)
+    - Kinesis Data Analytics: analyzer data streams with SQL or Apache Flink
+    - Kinesis Video Streams: capture, process and store video streams
 
-## Kinesis Streams Overview
+## Kinesis Data Streams Overview
 
 - Streams are divided in ordered shards/partitions
-- Data retention is 1 day by default, can go up to 7 days
+- Data retention is 1 day by default, can go up to 365 days
 - Provides the ability to reprocess, replay data
 - Multiple applications can consume the same stream
 - Provides real-time processing with scale of throughput
 - Once the data inserted in Kinesis, it can not be deleted (immutability)
+- Data that shares the same partition key goes to the same shard (ordering)
+- Producers:
+    - Kinesis SDK
+    - Kinesis Producer Library (KPL)
+    - Kinesis Agent
+    - 3rd party libraries
+- Consumers:
+    - Kinesis SDK
+    - Kinesis Client Library (KCL)
+    - Kinesis Connector Library
+    - Managed consumers: AWS Lambda, Kinesis Data Firehose, Kinesis Data Analytics
 
-## Kinesis Streams Shards
+## Kinesis Data Stream Capacity Modes
+
+- Provisioned mode:
+    - We choose the number of shards provisioned, scale them manually or using the API
+    - Each shard gets 1 MB/s (or 1000 records per second)
+    - Each shard gets 2 MB/s output speed (applicable for classic or fan-out consumer)
+    - We pay per shard provisioned per hour
+- On-demand mode:
+    - We don't need to provision or manage the capacity
+    - Default capacity provisioned (4 MB/s in or 4000 records per second)
+    - Scales automatically based on observed throughput peak during the last 30 days
+    - We pau per stream per hour and data in/out per GB
+
+## Kinesis Data Streams Shards
 
 - One stream is made of many shards
 - Billing is per shard provisioned, we can have as many shards as we want
@@ -26,7 +51,7 @@
 - The number of shards can evolve over time (reshard/merge)
 - Records are ordered per shard, not across shards
 
-## Kinesis Stream Records
+## Kinesis Data Stream Records
 
 - Data blob: data being sent, serialized as bytes, can be up to 1 MB, can represent anything
 - Record key: 
@@ -34,38 +59,30 @@
     - We should use a highly distributed key to avoid the hot partition problem
 - Sequence number: uniq id for each record. Added by Kinesis after ingestion
 
+## Kinesis Data Streams Security
+
+- We control access/authorization using IAM policies
+- Encryption in flights using HTTPS endpoints
+- Encryption at rest using KMS
+- We can implement our own encryption/decryption of data on client side
+- VPC Endpoints are available for Kinesis to access within VPC
+- We can monitor all the API calls using CloudTrail
+
 ## Kinesis Data Streams Limits
 
 - Producer: 1MB/s or 1000 messages/s at write PER SHARD other we get `ProducerThroughputException`
 - Consumer Classic: 
     - 2MB at read PER SHARD across all consumers
     - 5 API class per second PER SHARD across all consumers (if 3 different applications are consuming, possibility of throttling)
-- Data retention: 25 hours data retention by default which can be expended to 7 days
 
-## Kinesis Producers
-
-- Kinesis SDK
-- Kinesis Producer Library (KPL)
-- Kinesis Agent
-- CloudWatch Logs
-- 3rd party libraries
-
-## Kinesis Consumers
-
-- Kinesis SDK
-- Kinesis Client Library (KCL)
-- Kinesis Connector Library
-- AWS Lambda
-- 3rd party libraries
-
-## AWS Kinesis KCL
+## Kinesis CLient Library - KCL
 
 - It is a Java library
 - It uses DynamoDB to checkpoint offsets and to track other workers and share the work amongst them
 - Great for reading in a distributed manner
 - We can not have more KCL applications than shards (example: in case of 6 shards, we can have up to 6 application consumers)
 
-## AWS Kinesis Data Firehose
+## Amazon Kinesis Firehose
 
 - Fully managed service, no administration required
 - Offers **Near Real Time** (60 seconds latency minimum for non full batches) performance
