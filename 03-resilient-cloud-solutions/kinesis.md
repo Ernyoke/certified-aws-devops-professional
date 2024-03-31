@@ -10,7 +10,9 @@
     - Kinesis Data Analytics: analyzer data streams with SQL or Apache Flink
     - Kinesis Video Streams: capture, process and store video streams
 
-## Kinesis Data Streams Overview
+## Kinesis Data Streams
+
+### Overview
 
 - Streams are divided in ordered shards/partitions
 - Data retention is 1 day by default, can go up to 365 days
@@ -30,7 +32,7 @@
     - Kinesis Connector Library
     - Managed consumers: AWS Lambda, Kinesis Data Firehose, Kinesis Data Analytics
 
-## Kinesis Data Stream Capacity Modes
+### Capacity Modes
 
 - Provisioned mode:
     - We choose the number of shards provisioned, scale them manually or using the API
@@ -43,7 +45,7 @@
     - Scales automatically based on observed throughput peak during the last 30 days
     - We pau per stream per hour and data in/out per GB
 
-## Kinesis Data Streams Shards
+### Shards
 
 - One stream is made of many shards
 - Billing is per shard provisioned, we can have as many shards as we want
@@ -51,7 +53,7 @@
 - The number of shards can evolve over time (reshard/merge)
 - Records are ordered per shard, not across shards
 
-## Kinesis Data Stream Records
+### Records
 
 - Data blob: data being sent, serialized as bytes, can be up to 1 MB, can represent anything
 - Record key: 
@@ -59,7 +61,7 @@
     - We should use a highly distributed key to avoid the hot partition problem
 - Sequence number: uniq id for each record. Added by Kinesis after ingestion
 
-## Kinesis Data Streams Security
+### Security
 
 - We control access/authorization using IAM policies
 - Encryption in flights using HTTPS endpoints
@@ -68,14 +70,22 @@
 - VPC Endpoints are available for Kinesis to access within VPC
 - We can monitor all the API calls using CloudTrail
 
-## Kinesis Data Streams Limits
+### Limits
 
 - Producer: 1MB/s or 1000 messages/s at write PER SHARD other we get `ProducerThroughputException`
 - Consumer Classic: 
     - 2MB at read PER SHARD across all consumers
     - 5 API class per second PER SHARD across all consumers (if 3 different applications are consuming, possibility of throttling)
 
-## Kinesis CLient Library - KCL
+### Scaling Consumers
+
+- `GetRecords.IteratorAgeMilliseconds` CloudWatch Metric:
+    - The difference between current time and when the last record of the `GetRecords` call was written to the stream
+    - Used tot rack the progress if the consumer (tracks read position)
+    - If we have `IteratorAgeMilliseconds = 0`, then the records that are being read are completely caught up with the producer
+    - `IteratorAgeMilliseconds > 0` means we are not processing the records fast enough
+
+### Kinesis Client Library - KCL
 
 - It is a Java library
 - It uses DynamoDB to checkpoint offsets and to track other workers and share the work amongst them
@@ -85,29 +95,55 @@
 ## Amazon Kinesis Firehose
 
 - Fully managed service, no administration required
-- Offers **Near Real Time** (60 seconds latency minimum for non full batches) performance
-- We cal load data into Redshift, S3, ElasticSearch, Splunk
+- Offers **Near Real Time** performance:
+    - Buffer interval: 0 seconds with no buffering, up to 900 seconds
+    - Buffer size: minimum 1 MB, we can set a higher number
+- We can load data into AWS destinations (S3, Redshift - COPY through S3, OpenSearch), into 3rd party destinations (such as Splunk, Datadog, New Relic, MongoDB, etc.) or into a custom destination using a HTTP Endpoint
 - Offers automatic scaling
 - Offers data transformation ability through AWS Lambda (ex: CSV => JSON)
 - Supports compression when target is S3 (GZIP, ZIP and SNAPPY)
 - We pay for the amount of data going through Firehose
+- Data is written in batches to the destinations
+- We can send failed or all data into a backup S3 bucket
 
 ## Kinesis Data Streams vs Firehose
 
-- Streams:
+- Kinesis Data Streams:
     - Requires to write custom code (producer/consumer)
     - Offers real time (~200 ms latency for classic) performance
     - We must manage scaling (shard splitting/merging)
-    - Data storage for 1 to 7 days, data can be replayed, streams can have multiple consumers
-- Firehose:
-    - Fully managed, we can send data to S3, Splunk, Redshift, ElasticSearch
+    - Data storage for 1 to 365 days, data can be replayed, streams can have multiple consumers
+- Kinesis Firehose:
+    - Fully managed, we can send data to S3, Redshift, OpenSearch / 3rd party / custom HTTP endpoints
     - Serverless data transformation with Lambda
-    - Offer near real time performance (lower buffer time is 1 minute)
+    - Offers near real time performance
     - Automatically scales
-    - Offers no data storage, no replayability
+    - Offers no data storage, does not support replay capability
 
-## AWS Kinesis Data Analytics
+## Kinesis Data Analytics for SQL Applications
 
 - We can perform real-time data analytics on Kinesis Streams using SQL
+- We can add reference data from Amazon S3 to enrich streaming data
 - Kinesis Data Analytics is a managed service, has auto scaling capabilities by default
-- Can create streams out of real-time queries
+- We can create streams out of real-time queries
+- Payment: we pay for actual consumption rate
+- Data can be sent into 2 destinations: 
+    - Kinesis Data Streams
+    - Kinesis Data Firehose
+- Use cases:
+    - Time-series analytics
+    - Real-time dashboards
+    - Real-time metrics
+
+## Kinesis Data Analytics for Apache Flink
+
+- **Note: This service has been renamed to Amazon Managed Service for Apache Flink!**
+- We can use Flink (Java, Scala or SQL) to process and analyze streaming data
+- We can read data from 2 data sources:
+    - Kinesis Data Streams
+    - Amazon MSK
+- With this service we run any Apache Flink application on a managed cluster on AWS:
+    - We get automatic provisioning of resources, parallel computation and automatic scaling
+    - We get application backups: implemented as checkpoints and snapshots
+- Flink is a lot more powerful than a simple SQL query language
+- Flink does not supports reading data from Firehose (use Kinesis Analytics for SQL instead)
