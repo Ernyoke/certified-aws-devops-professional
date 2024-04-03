@@ -32,41 +32,38 @@
     - Recommended by AWS
 - For ASG we can select between Launch Configurations and Launch Templates
 
-## ASG - Types of Scaling
+## ASG - Scaling Policies
 
-- Scheduled scaling:
+- **Scheduled scaling**:
     - Scaling based on a schedule allows us to scale the application ahead of know load changes
-- Dynamic scaling:
-    - ASG enables us to follow the demand curve for our application closely, reducing the need to manually provision instances
-    - ASG can automatically adjust the number of EC2 instances as needed to maintain a target
-- Predictive scaling:
+- **Dynamic scaling**:
+    - **Target Tracking Scaling**:
+        - Simple to set up
+        - Example: we want the average ASG CPU to stay around 40%
+    - **Simple/Step Scaling**
+        - Requires the presence of a CloudWatch alarm
+        - Example: 
+            - When a CloudWatch alarm is triggered (example average CPU > 70%), then add 2 units
+            - When a CloudWatch alarm is triggered (example average CPU < 30%), then remove 1 unit
+- **Predictive scaling**:
     - ASG uses machine learning to schedule the right number of EC2 instances in anticipation of traffic changes
 
-## Scheduled Actions
+## Metrics to Scale On
 
-- Can be used if we can anticipate scaling based on known usage patterns
-- Example: increase the min capacity to 10 at 5 PM on Fridays
-- Occurrence can be once, every 5, 30, 60 minutes or a cron expression
+- `CPUUtilization`: average CPU utilization across our instances
+- `RequestCountPerTarget`: make sure the number of requests per EC2 instance is stable
+- `AverageNetworkIn`/`AverageNetworkOut`
+- Any custom metric we push into CloudWatch
 
-## Scaling Policies
+## Cooldown and Warmup Period
 
 - Default cooldown: number of seconds after a scaling activity completes before another can begin (cooldown period). Default value is 300 seconds
+- During the cooldown period the ASG will not launch/terminate additional instances
 - Warm up period: number of seconds ASG has to wait until the metric of a new instance can be taken in consideration for further ASG action
-- **Target Tracking Scaling**
-    - Most simple and easy to setup
-    - Example: we want the average ASG CPU to stay around 40%
-- **Simple/Step Scaling**
-    - Requires the presence of a CloudWatch alarm
-    - Example: 
-        - When a CloudWatch alarm is triggered (example average CPU > 70%), then add 2 units
-        - When a CloudWatch alarm is triggered (example average CPU < 30%), then remove 1 unit
-- **Scheduled Actions**
-    - Can be used if we can anticipate scaling based on known usage patterns
-    - Example: increase the min capacity to 10 at 5 PM on Fridays
 
 ## ALB Integration
 
-Slow start duration: in target group we can set a duration period during which the number of requests will be gradually increased to the new instance
+- Slow start duration: in target group we can set a duration period during which the number of requests will be gradually increased to the new instance
 
 ## ALB Troubleshooting - Suspend Processes
 
