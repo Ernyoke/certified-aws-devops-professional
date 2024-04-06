@@ -80,17 +80,33 @@
 ## ASG Lifecycle Hooks
 
 - Reference: [https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html](https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html)
-- We can add lifecycle hooks to an ASG
-- These hooks enable ASG to be aware of events during scaling and perform custom actions when events happens
+- We can use lifecycle hooks to accomplish some work before our application goes live
+- ASG states:
+
+![ASG Lifecycle Hooks](images/lifecycle-hooks.png)
+
+- We can perform actions before the goes in service at the `Pending` state of when the instance is in the `Terminating` state
 - Use cases:
     - We can run a script to download and install software when a scale-out event occurs
     - When a scale-in event happens, we can send a notification to EventBridge to execute a Lambda in order to download logs from the instance
-- Transitions between ASG states:
-    ![lifecycle_hooks](lifecycle_hooks.png)
 - Complete lifecycle action:
     ```
     aws autoscaling complete-lifecycle-action --lifecycle-action-result CONTINUE --lifecycle-hook-name LaunchHook --auto-scaling-group-name demo-asg --instance-id i-xxxx -region <region> --profile <profile>
     ```
+
+## SNS Notifications
+
+- ASG supports sending SNS notifications for the following kind of events:
+    - `autoscaling:EC2_INSTANCE_LAUNCH`
+    - `autoscaling:EC2_INSTANCE_LAUNCH_ERROR`
+    - `autoscaling:EC2_INSTANCE_TERMINATE`
+    - `autoscaling:EC2_INSTANCE_TERMINATE_ERROR`
+- Integration with Event Bridge:
+    - We can create rules that match the following ASG events:
+        - EC2 instance launching, EC2 instance launch successful/unsuccessful
+        - EC2 instance terminating, EC2 instance termination successful/unsuccessful
+        - EC2 Auto Scaling Instance Refresh Checkpoint Reached
+        - EC2 Auto Scaling Instance Refresh Started, Succeeded, Failed, Cancelled
 
 ## ASG Termination Policies
 
@@ -101,12 +117,34 @@
     2. Determine whether any of the instances use the oldest launch template/launch configuration
     3. If there are multiple instances with the latest launch configuration, terminate the one with is the closes to the next billing hour. If there are multiple of this, terminate on at random
 - Custom termination policies:
-    - Default: (presented above)
-    - AllocationStrategy: terminate instances to align the remaining ones to the allocation strategy
-    - OldestLaunchTemplate: terminate instances which use an older launch configuration
-    - ClosestToNextInstanceHour
-    - NewestInstance
-    - OldestInstance
+    - `Default`: (presented above)
+    - `AllocationStrategy`: terminate instances to align the remaining ones to the allocation strategy
+    - `OldestLaunchTemplate`: terminate instances which use an older launch configuration
+    - `ClosestToNextInstanceHour`
+    - `NewestInstance`
+    - `OldestInstance`
+
+## Warm Pools
+
+- Scale-out latency problem:
+    - When an ASG scales out, it tries to launch instances as fast as possible
+    - Some applications contain a lengthy unavoidable latency that exists at the application initialization/bootstrap layer
+    - Historically the solution was to over-provision compute resources to absorb the unexpected demand increases or to use Golden Images to try to reduce boot time
+- Warm pools:
+    - Used to reduce scale-out latency by maintaining a pool of pre-initialized instances
+    - In case of a scale-out event, ASG uses the pre-initialized instances from the warm pool instead of launching new instances
+- Warm pool size settings:
+    - Warm pool size: calculated as the difference between the ASG groups' maximum desired capacity and its desired capacity
+    - Minimum warm pool size: statically value set for the pool's minimum number of instances
+- Warm pool instance state:
+    - We can keep instances in the warm pool in one of these states: `Stopped`, `Running`, `Hibernated`
+    - Any instance in the war pool does not contribute to the ASG metrics that affect Scaling Policies
+- Instance reuse policy:
+    - By default, ASG terminates instances in case of a scale-in, then it launches new instances in the warm pool
+    - The instance reuse policy allows us to return instances to the warm pool when a scale-in happens
+- Lifecycle hooks:
+
+![ASG Lifecycle Hooks with Warm Pools](images/lifecycle-hooks-warm-pools.png)
 
 ## ASG Integration with SQS
 
