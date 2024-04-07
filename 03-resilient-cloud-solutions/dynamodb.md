@@ -8,6 +8,7 @@
 - Integrates with IAM for security and administration
 - Enables event driven programming
 - Low cost
+- Provides **Standard** and **Infrequent Access** (IA) tables classes
 
 | Traditional databases                                      | NoSQL
 | ---------------------------------------------------------- | ------------------------------------------------------------- |
@@ -38,12 +39,16 @@
     - Data is grouped by partition key
     - Sort key = range key
 
-## DynamoDB Provisioned Throughput
+## DynamoDB Read/Write Capacity Modes
 
-- Table must have a provisioned read and write capacity
-- **Read Capacity Units (RCU)**: throughput for reads
-- **Write Capacity Units (WCU)**: throughput for writes
-- Option to setup auto-scaling of throughput to meet demand
+## Provisioned Mode (default)
+
+- We specify the number of reads/writes per second
+- We need to plan capacity beforehand
+- We pay for:
+    - **Read Capacity Units (RCU)**: throughput for reads
+    - **Write Capacity Units (WCU)**: throughput for writes
+- Option to setup auto-scaling for RCU and WCU
 - Throughput can be exceeded temporarily using "burst credits"
 - If no burst credits are available, we get a **ProvisionedThroughputException**
 - We should use exponential back-off for retries in case get the exception above
@@ -87,6 +92,13 @@
     ```
     10 * 8KB / 4  = 20 RCU (we have to round up 6KB to 8 KB)
     ```
+
+## On-Demand Mode
+
+- Reads/writes automatically scale up/down with our workloads
+- No capacity planning is needed
+- We pay for what capacity we use, can be more expensive
+- Great for unpredictable workloads and steep sudden spikes
 
 ## DynamoDB Internal Partitions
 
