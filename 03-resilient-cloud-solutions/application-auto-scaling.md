@@ -1,0 +1,24 @@
+# AWS Application Auto Scaling
+
+- It is a service which role is to monitor our apps and automatically adjust capacity to maintain steady and predictable performance at lowest cost
+- From a single place we can manage auto scaling of multiple resources across multiple services
+- We point to our app and select the services and resources we want to scale (no need to setup alarms and scaling actions for each service)
+- To search for resources/services we can use CloudFormation Stacks, Tags or EC2 Auto Scaling Groups
+- We build Scaling Plans to automatically add/remove capacity from our resources in real-time as demand changes
+- Supports **Target Tracking**, **Step** and **Scheduled Scaling Policies**
+- Services supported by Application Auto Scaling:
+    - AppStream 2.0 Fleets
+    - **Aurora Replicas**
+    - Comprehend endpoints
+    - **DynamoDB Tables and GSI**
+    - **ECS Services**
+    - ElastiCache for Redis Replication Groups
+    - EMR Clusters
+    - KeySpaces Tables
+    - **Lambda Provisioned Concurrency**
+    - MSK Broker Storage
+    - Neptune Clusters
+    - SageMaker Endpoint Variants
+    - **Spot Fleet Requests**
+    - **Auto Scaling Groups**
+    - other custom resources

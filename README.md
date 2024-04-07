@@ -34,6 +34,8 @@
     - [Amazon Kinesis](03-resilient-cloud-solutions/kinesis.md)
     - [Amazon Route 53](03-resilient-cloud-solutions/route53.md)
     - [Auto Scaling Groups](03-resilient-cloud-solutions/asg.md)
+    - [AWS Application Auto Scaling](03-resilient-cloud-solutions/application-auto-scaling.md)
+    - [RDS Read Replicas for Read Scalability](03-resilient-cloud-solutions/rds-read-replicas.md)
     - [DynamoDB](03-resilient-cloud-solutions/dynamodb.md)
     - [Amazon S3](03-resilient-cloud-solutions/s3.md)
 4. Monitoring and Logging
