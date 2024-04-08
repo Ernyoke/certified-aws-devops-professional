@@ -222,17 +222,19 @@
 
 ## DynamoDB Accelerator (DAX)
 
-- It is a seamless caching mechanism for DynamoDB
+- Fully managed, highly available, seamless in-memory cache for DynamoDB
 - It can be activated without doing any code change on the application which uses the database
 - Writes go through DAX to DynamoDB
-- Micro second latency for cache reads & queries
-- Solves one big problem: **Hot Key problem** (too many requests for the same key)
+- Microseconds latency for cache reads & queries
+- DAX addresses 3 core scenarios:
+    - DAX reduces response time of eventual consistency reads
+    - DAX reduces operational and application complexity by providing a managed service for caching
+    - For read-heavy or bursty workloads, DAX provides increased throughput and potential cost savings by reducing the needs for overprovision read capacity units
 - By default: 5 min TTL for every item in the cache
-- Up to 10 nodes in the cluster
 - Multi AZ (3 nodes minimum recommended)
 - Security (encryption at rest with KMS, IAM, CloudTrail)
 
-## DynamoDB Streams
+## DynamoDB Stream Processing
 
 - Changes in a DynamoDB table (create, update, delete) are pushed into a stream
 - This stream can be read by Lambda or by EC2 instances
@@ -241,26 +243,29 @@
     - Create derivate tables/view
     - Insert data in ElasticSearch
     - etc.
-- Could implement cross region replication using Streams (nowadays it is a provided feature by DynamoDB)
-- Stream have 24 hours of retention (we can not change this)
+- There are offers 2 kinds of stream processing for DynamoDB:
+    - DynamoDB Streams:
+        - 24 hours retention
+        - Limited number of consumers
+        - Can be processed with Lambda Triggers of DynamoDB Stream Kinesis Adapter
+    - Kinesis Data Streams (newer feature):
+        - 1 year retention
+        - We can have a higher number of consumers compared to DynamoDB Streams
+        - It can be processed by Lambda, Kinesis Data Analytics, Firehose, AWS Glue Streaming ETL, etc.
 - We can choose what type of information ends up in stream:
-    - KEYS_ONLY - only the key attributes of the modified items are pushed to the stream
-    - NEW_IMAGE - the entire item is pushed to the stream after it was modified
-    - OLD_IMAGE - the entire item is pushed to the stream before it was modified
-    - NEW_AND_OLD_IMAGES - the entire item is pushed to the stream
-- DynamoDB streams are made of shards, we don't have to provision them
-- Records are not retroactively pushed to the stream after enabling it!
-
-### DynamoDB Streams and Lambda
-
-- We need to define an event source mapping to read from the stream
-- We need to ensure the Lambda has the appropriate methods
-- The Lambda is invoked synchronously
+    - `KEYS_ONLY` - only the key attributes of the modified items are pushed to the stream
+    - `NEW_IMAGE` - the entire item is pushed to the stream after it was modified
+    - `OLD_IMAGE` - the entire item is pushed to the stream before it was modified
+    - `NEW_AND_OLD_IMAGES` - the entire item is pushed to the stream
+- DynamoDB Streams with Lambda functions:
+    - We need to define an event source mapping to read from the stream
+    - We need to ensure the Lambda has the appropriate methods
+    - The Lambda is invoked synchronously
 
 ## DynamoDB TTL (Time to Live)
 
 - TTL = item is automatically deleted after an expiry date/time
-- TTL  is provided at no extra cost / no additional WCU/RCU used
+- TTL is provided at no extra cost / no additional WCU/RCU used
 - TTL is background task operated by DynamoDB
 - Helps reduce storage and manage the size of the table over time
 - Helps adhere to regulatory norms
@@ -269,7 +274,7 @@
     - Should be a number (we should use time to epoch conversion for deletion timestamp)
 - DynamoDB deletes expired items within 48 hours (it wont happen right after the item expired)
 - Deleted items are deleted from the indexes as well (GSI/LSI)
-- Deleted items could be recovered if DynamoDB Streams were enabled
+- Deleted items could be recovered if DynamoDB Streams are enabled
 
 ## DynamoDB CLI
 
@@ -361,35 +366,44 @@
     - Option 2: create a back-up, restore it into a new table
     - Option 3: Scan + Write
 
+## DynamoDB Global Tables
+
+- Enable cross-region replication of a DynamoDB table
+- Require DynamoDB Streams to be enabled in order to work
+- Multi-region replication is **Active-Active** => applications can READ and WRITE in any region to the table
+- Data replication is eventually consistent
+- Transactional operations provide atomicity, consistency, isolation, and durability (ACID) guarantees only within the region where the write is made originally
+- Transactions are not supported across regions in global tables
+
 ## DynamoDB Backups
 
 - **On-demand backups**:
     - We can use the DynamoDB on-demand backup capability to create full backups of our tables for long-term retention and archival for regulatory compliance needs
     - The on-demand backup and restore process scales without degrading the performance or availability of the applications
     - We can create backups that are consistent within seconds across thousands of partitions without worrying about schedules or long-running backup processes
-- **Point-in-Time Recovery**:
+    - Can be configured an managed in AWS Backup (enables cross-region copy)
+- **Continuous backups with Point-in-Time Recovery (PITR)**:
     - Point-in-time recovery helps protect our DynamoDB tables from accidental write or delete operations
     - Has to be enabled by AWS console, CLI, or with DynamoDB API. Provides continuous backups until we explicitly turn it off
     - With point-in-time recovery, we don't have to worry about creating, maintaining, or scheduling on-demand backups
     - With point-in-time recovery, we can restore that table to any point in time during the last 35 days
+    - The recovery process creates a new DynamoDB table
 
-## DynamoDB Global Tables
+## DynamoDB Integration with S3
 
-- Enable cross-region replication of a DynamoDB table
-- Require DynamoDB streams to be enabled in order to work
-- Multi-region, reads can happen in each replication
-- Data replication is eventually consistent
-- Transactional operations provide atomicity, consistency, isolation, and durability (ACID) guarantees only within the region where the write is made originally
-- Transactions are not supported across regions in global tables
-
-## S3 Metadata Index
-
-- Write objects to S3 -> write events trigger a Lambda function -> the function writes the object metadata into DynamoDB table
-- Use case: API for object metadata:
-    - Search by date
-    - Total storage used by consumer
-    - List all objects with certain attributes
-    - Find all objects uploaded within a date range
+- We can export a table to S3. To do this we must enable PITR:
+    - Works for any point in time in the last 35 days
+    - When doing an export, the read capacity of the table wont be affected
+    - Use cases:
+        - Data analytics with Athena
+        - Retain snapshot for auditing
+        - ETL on top of S3 data before importing it back into DynamoDB
+    - Format of the data exported can be in DynamoDB JSON or ION format
+- We can import a table from S3:
+    - Data has to be in CSV, DynamoDB JSON or ION
+    - Does not consume write capacity
+    - The import will create a new table
+    - Import errors are logged in CloudWatch Logs
 
 ## DynamoDB Security & Other Features
 
@@ -398,7 +412,6 @@
     - Access fully controlled by IAM
     - Encryption at rest using KMS
     - Encryption in transit using SSL/TLS
-- Amazon DMS:
-    - Used to migrate data from Mongo, Oracle, MySQL, S3 to DynamoDB
+- Integration with Amazon DMS
 - Local DynamoDB for development
 
