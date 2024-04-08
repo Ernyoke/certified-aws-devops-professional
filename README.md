@@ -38,6 +38,7 @@
     - [RDS Read Replicas for Read Scalability](03-resilient-cloud-solutions/rds-read-replicas.md)
     - [Amazon ElastiCache](03-resilient-cloud-solutions/elasticache.md)
     - [DynamoDB](03-resilient-cloud-solutions/dynamodb.md)
+    - [DMS - Database Migration Service](03-resilient-cloud-solutions/dms.md)
     - [Amazon S3](03-resilient-cloud-solutions/s3.md)
 4. Monitoring and Logging
     - [CloudTrail](04-monitoring-and-logging/cloudtrail.md)
