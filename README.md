@@ -41,6 +41,7 @@
     - [DMS - Database Migration Service](03-resilient-cloud-solutions/dms.md)
     - [Amazon S3](03-resilient-cloud-solutions/s3.md)
     - [Elastic Load Balancer](03-resilient-cloud-solutions/elb.md)
+    - [NAT Gateways](03-resilient-cloud-solutions/nat.md)
 4. Monitoring and Logging
     - [CloudTrail](04-monitoring-and-logging/cloudtrail.md)
     - [CloudWatch](04-monitoring-and-logging/cloudwatch.md)
