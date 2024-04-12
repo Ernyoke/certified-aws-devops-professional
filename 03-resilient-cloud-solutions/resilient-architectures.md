@@ -1,14 +1,14 @@
-# Multi AZ and Multi Region in AWS
+# Resilient Architectures
 
-## Multi AZ
+## Multi AZ in AWS
 
 - Services where multi AZ must be enabled manually:
     - EFS, ELB, ASG, Elastic Beanstalk
-    - RDS, ElasticCache: multi AZ used for failovers
+    - RDS, OpenSearch: multi AZ used for failovers
     - Aurora:
         - Data is stored automatically across multi AZ
         - It can have multi AZ for DB itself (multi master, read replicas, multi AZ deployments)
-    - ElasticCache (managed): multi master
+    - OpenSearch (managed): multi master
     - Jenkins (self-hosted): multi master
 - Services where multi az is implicitly enabled:
     - S3 (except OneZone-IA)
@@ -23,6 +23,16 @@
     - We create a lifecycle hook for `Terminate`: make a snapshot of the EBS volume
     - We create a lifecycle hook fot `Start`: copy the snapshot, create an EBS, attach it to the instance
 - Note: for PIOPS volumes (IO1), to get max performance after snapshot,  read the entire volume once (pre warming of IO blocks)
+
+## Blue-Green Architecture
+
+- Blue-Green with ALB and Route53:
+
+![Blue-Green Architecture](images/blue-green.png)
+
+- Blue-Green with AWS Lambda:
+
+![Blue-Green AWS Lambda Architecture](images/blue-green-lambda.png)
 
 ## Multi Region Services
 
