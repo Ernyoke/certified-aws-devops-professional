@@ -43,6 +43,7 @@
     - [Elastic Load Balancer](03-resilient-cloud-solutions/elb.md)
     - [NAT Gateways](03-resilient-cloud-solutions/nat.md)
     - [Resilient Architectures](03-resilient-cloud-solutions/resilient-architectures.md)
+    - [Disaster Recovery](03-resilient-cloud-solutions/disaster-recovery.md)
 4. Monitoring and Logging
     - [CloudTrail](04-monitoring-and-logging/cloudtrail.md)
     - [CloudWatch](04-monitoring-and-logging/cloudwatch.md)
@@ -51,7 +52,6 @@
     - [Tagging Strategies](04-monitoring-and-logging/tagging.md)
 5. Incident and Event Response
     - [Health](05-incident-and-event-response/health.md)
-    - [Disaster Recovery](05-incident-and-event-response/disaster-recovery.md)
 6. Security and Compliance
     - [Amazon Inspector](06-security-and-compliance/inspector.md)
     - [AWS Config](06-security-and-compliance/config.md)
