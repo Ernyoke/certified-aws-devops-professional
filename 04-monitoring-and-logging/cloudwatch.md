@@ -4,20 +4,27 @@
 
 - CloudWatch provides metrics for every services in AWS
 - A metric is a variable to monitor (CPUUtilization, NetworkIn, etc.)
-- Metrics belong to namespaces
-- A dimension is an attribute of a metric (instance id, environment, etc)
-- We can have up to 10 dimensions per metric
-- Metrics have a timestamp
+- Metrics belong to **namespaces**
+- A **dimension** is an attribute of a metric (instance id, environment, etc)
+- We can have up to 30 dimensions per metric
+- Metrics have a **timestamp**
 - We can create a CloudWatch Dashboards with metrics
 
-## CloudWatch EC2 Detailed Monitoring
+### CloudWatch Metric Streams
+
+- Used to continually stream CloudWatch metrics to a destination of our choice with near-real-time delivery and low latency
+- Destination can be the following:
+    - Amazon Kinesis Data Firehose and then its destinations
+    - Directly into 3rd party service providers such as Datadog, Dynatrace, New Relic, Splunk, Sumo Logic, etc.
+
+### CloudWatch EC2 Detailed Monitoring
 
 - EC2 instance metrics are reporting every 5 minutes
 - With detailed monitoring we may get samplings every 1 minute
 - Detailed monitoring also can improve the scalability of our application: use detailed monitoring if we want to more prompt scale of our ASG
-- Maximum retention period for metrics is 15 months. Data points with a period less than 60 second are available for 3 hours, data points with period of 60 seconds are available for 15, 5 minute data points for 63 days and 1 hour data points for 15 months
+- Maximum retention period for metrics is 15 months. Data points with a period less than 60 second are available for 3 hours, data points with period of 60 seconds are available for 15 days, 5 minute data points for 63 days and 1 hour data points for 15 months
 
-## CloudWatch Builtin Metrics
+### CloudWatch Builtin Metrics
 
 - EC2:
     - CPU Utilization
@@ -57,28 +64,37 @@
     - Free Memory
     - Swap Usage
 
-## CloudWatch Custom Metrics
+### CloudWatch Custom Metrics
 
 - Possibility to define and send our own custom metrics to CloudWatch
 - Ability to use dimensions (attributes) to segment metrics
-- Metric resolution:
+- Metric resolution (`StorageResolution` API parameter):
     - Standard: 1 minute
-    - High resolution: up to 1 second (StorageResolution API parameter)
+    - High resolution: 1/5/10/30 seconds
 - To send a metric to CloudWatch, we can use the `PutMetricData` API
 
     ```
     aws cloudwatch put-metric-data --metric-name <metric-name> --namespace <namespace> --value <value> --dimensions InstanceId=1-23456789,Instance-Type=m1.small --profile <profile> --region <region>
     ```
 
+- CloudWatch accepts metric data points up to two weeks in the past and two hours in the future
 - We should use exponential back-off in case of throttle errors
 
-## Export CloudWatch Metrics
+### Export CloudWatch Metrics
 
 - `GetMetricStatistics` API:
 
     ```
     aws cloudwatch get-metric-statistics --namespace <namespace>  --metric-name <metric name> --dimensions=<dimensions> --statistics Maximum --start-time 2019-08-10T00:00:00 --end-time <end-time> --period <period> --profile <profile> --region <region>
     ```
+
+### CloudWatch Anomaly Detection
+
+- Used to continuously analyze metrics to determine normal baselines and surface anomalies using machine learning algorithms
+- It creates a model based on the metric's past data
+- Shows us which values in the graph are out of the normal range
+- Allows us to create alarms based on expect values (instead of using a static threshold)
+- Provides the ability to exclude time periods or events from being trained
 
 ## CloudWatch Alarms
 
@@ -104,7 +120,7 @@
     aws cloudwatch set-alarm-state --alarm-name "name" --state-values ALARM --state-reason "testing"
     ```
 
-## Billing Alarms
+### Billing Alarms
 
 - We can create an alarm based on spending
 - We can send notifications to SNS topics if the billing alarms is triggered
@@ -133,26 +149,26 @@
 - To send logs to CloudWatch, we have to make sure IAM permissions are correct
 - Logs can be encrypted using KMS
 
-## CloudWatch Unified Agent
+### CloudWatch Unified Agent
 
 - Newer logging agent, can be used for sending metrics and logs as well to CloudWatch from EC2 instances and on-premises
 - We can store configurations for the agent in SSM Parameter store to be reusable across multiple instances
 - The unified agent can send `statsd` to send information to CloudWatch
 - With the agent we can send memory and internal CPU metrics to CloudWatch
 
-## CloudWatch Metric Filters
+### CloudWatch Metric Filters
 
 - We can create CloudWatch metrics from logs by creating metric filters
 - A metric filter is a filter pattern which will be applied to log messages
 - We can create alarms out of metric filters
 
-## CloudWatch Logs Subscriptions
+### CloudWatch Logs Subscriptions
 
 - Subscriptions are used to access real-time feed of log events from CloudWatch and have it delivered to other services such as Kineses Streams, Kinesis Firehose or AWS Lambda for custom processing
 - Data can be loaded and analyzed in real time using Lambda and Kinesis Streams. Kinesis Firehose is a near real time service, data will be loaded in real time into it, but the service will not process it in real time
 - Reference: [https://aws.amazon.com/blogs/big-data/power-data-ingestion-into-splunk-using-amazon-kinesis-data-firehose/](https://aws.amazon.com/blogs/big-data/power-data-ingestion-into-splunk-using-amazon-kinesis-data-firehose/)
 
-## All kind of Logs
+### All kind of Logs
 
 - Application Logs:
     - Logs that are produced by application code
@@ -169,7 +185,7 @@
     - List of all the requests for individual files that people have requested from a site
     - Example: `/var/log/apache/access.log`
 
-## AWS Managed Logs
+### AWS Managed Logs
 
 - Load Balancer access logs: can be sent directly to S3
 - CloudTrail Logs: can be sent either to S3 or CloudWatch Logs
@@ -177,36 +193,6 @@
 - Route53 Access Logs: can be only sent to CloudWatch Logs (can be exported with a subscription)
 - S3 Access Logs: can be sent directly to S3
 - CloudFront Access Logs: can be sent directly to S3
-
-## CloudWatch Events
-
-- Source + Rule => Target should change in some ways
-- Schedule: Cron jobs
-- Event Pattern: rule to react to a service doing something, example: CodePipeline state change
-- CloudWatch Events can trigger Lambda Functions, can send notifications to SNS, SQS, Kinesis Messages
-- A event creates a small JSON document to give information about the change
-
-## CloudWatch Events Integration with CloudTrail API
-
-- All events that are delivered via CloudTrail have `AWS API Call via CloudTrail` as the value for detail-type
-- To create a rule that triggers on an action by an AWS service that does not emit events, we can base the rule on API calls made by that service
-
-## CloudWatch Events cs S3 Event Notifications
-
-- S3 Event Notifications: we can use the Amazon S3 Event Notifications feature to receive notifications when certain events happen in an S3 bucket
-- S3 can publish notifications when the following events happen:
-    - New object created
-    - Object is removed
-    - Object is restored from Glacier
-    - Reduced Redundancy Storage object lost
-    - Replication event
-- S3 event notification destinations are:
-    - SNS
-    - SQS
-    - Lambda
-- We can use CloudWatch Events to catch some events which can not be handled by S3 Event Notifications
-- We have to have a CloudTrail trail in order to have S3 object level events in CloudWatch
-- CloudWatch Events provide bucket level events, while S3 Events provide object level events only
 
 ## CloudWatch Dashboard
 

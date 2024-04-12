@@ -45,13 +45,14 @@
     - [Resilient Architectures](03-resilient-cloud-solutions/resilient-architectures.md)
     - [Disaster Recovery](03-resilient-cloud-solutions/disaster-recovery.md)
 4. Monitoring and Logging
-    - [CloudTrail](04-monitoring-and-logging/cloudtrail.md)
     - [CloudWatch](04-monitoring-and-logging/cloudwatch.md)
-    - [AWS X-Ray](04-monitoring-and-logging/x-ray.md)
-    - [Amazon ElasticSearch (Amazon ES)](04-monitoring-and-logging/elasticsearch.md)
-    - [Tagging Strategies](04-monitoring-and-logging/tagging.md)
+    - [Amazon Lookout for Metrics](04-monitoring-and-logging/lookout.md)
+    - [Amazon OpenSearch](04-monitoring-and-logging/opensearch.md)
 5. Incident and Event Response
     - [Health](05-incident-and-event-response/health.md)
+    - [CloudWatch Events](05-incident-and-event-response/eventbridge.md)
+    - [CloudTrail](05-incident-and-event-response/cloudtrail.md)
+    - [AWS X-Ray](05-incident-and-event-response/x-ray.md)
 6. Security and Compliance
     - [Amazon Inspector](06-security-and-compliance/inspector.md)
     - [AWS Config](06-security-and-compliance/config.md)
@@ -63,6 +64,7 @@
     - [Cost Allocation Tags](06-security-and-compliance/cost-allocation-tags.md)
     - [Secrets and License Manager](06-security-and-compliance/manager.md)
     - [Amazon Macie](06-security-and-compliance/macie.md)
+    - [Tagging Strategies](06-security-and-compliance/tagging.md)
 
 ## Exam Description
 

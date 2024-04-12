@@ -1,4 +1,4 @@
-# Amazon ElasticSearch (Amazon ES)
+# Amazon OpenSearch
 
 - Managed version of ElasticSearch (open source project)
 - Needs to run on servers (not a serverless offering)
@@ -12,7 +12,7 @@
 
 ## ELK Stack - ElasticSearch, Logstash, Kibana
 
-- ElasticSearch: provides search and indexing capability
+- OpenSearch/ElasticSearch: provides search and indexing capability
 - Kibana: 
     - Provides real-time dashboards on top of the data that sits in ES
     - Alternative to CloudWatch dashboards (more advanced capabilities)
