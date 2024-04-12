@@ -68,7 +68,7 @@
 
 ## Exam Description
 
-The AWS Certified DevOps Engineer - Professional (DOP-CO1) examination validates technical expertise in provisioning, operating, and managing distributed application systems on the AWS platform. It is intended for individuals who perform a devops engineer role.
+The AWS Certified DevOps Engineer - Professional (DOP-CO2) examination validates technical expertise in provisioning, operating, and managing distributed application systems on the AWS platform. It is intended for individuals who perform a devops engineer role.
 
 It validates an examinee's ability to:
 
