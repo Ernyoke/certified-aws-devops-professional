@@ -254,3 +254,21 @@
 - Pricing:
     - 3 dashboards (up to 50 metrics) for free
     - $3/dashboard/month
+
+## CloudWatch Synthetics Canary
+
+- Synthetics Canary are configurable scripts that will monitor APIs and URLs
+- These scripts meant to reproduce what a customer would do in order to find issues before the app is deployed to production
+- They can be also used to check the availability and latency of our endpoints
+- They can store load time data and screenshots of the UI
+- They have integration with CloudWatch Alarms
+- The scripts can be written in Node.js or Python
+- Provides programmatic access to a headless Chrome browser
+- They can be run once or on a regular basis
+- Canary Blueprints:
+    - Heartbeat Monitor: load URL, store screenshot and an HTTP archive file
+    - API Canary: test basic read and write functions of a REST API
+    - Broken Link Checker: check all links inside a page
+    - Visual Monitoring: compare a screenshot taken during a canary run with a baseline screenshot
+    - Canary Recorder: used with CloudWatch Synthetics Recorder - used to record actions on a website and automatically generate a test script for that
+    - GUI Workflow Builder: verifies that actions can be taken on a webpage (example: test a webpage with a login form)
