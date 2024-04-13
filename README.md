@@ -48,6 +48,7 @@
     - [CloudWatch](04-monitoring-and-logging/cloudwatch.md)
     - [Amazon Lookout for Metrics](04-monitoring-and-logging/lookout.md)
     - [Amazon OpenSearch](04-monitoring-and-logging/opensearch.md)
+    - [Amazon Athena](04-monitoring-and-logging/athena.md)
 5. Incident and Event Response
     - [Health](05-incident-and-event-response/health.md)
     - [CloudWatch Events](05-incident-and-event-response/eventbridge.md)
