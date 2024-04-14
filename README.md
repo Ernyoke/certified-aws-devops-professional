@@ -51,6 +51,7 @@
     - [Amazon Athena](04-monitoring-and-logging/athena.md)
 5. Incident and Event Response
     - [Amazon EventBridge (formerly known as CloudWatch Events)](05-incident-and-event-response/eventbridge.md)
+    - [S3 Event Notifications and Object Integrity](05-incident-and-event-response/s3-event-notifications.md)
     - [CloudTrail](05-incident-and-event-response/cloudtrail.md)
     - [AWS X-Ray](05-incident-and-event-response/x-ray.md)
     - [Health](05-incident-and-event-response/health.md)
