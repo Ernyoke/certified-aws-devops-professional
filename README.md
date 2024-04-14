@@ -52,9 +52,9 @@
 5. Incident and Event Response
     - [Amazon EventBridge (formerly known as CloudWatch Events)](05-incident-and-event-response/eventbridge.md)
     - [S3 Event Notifications and Object Integrity](05-incident-and-event-response/s3-event-notifications.md)
+    - [AWS Health Dashboards](05-incident-and-event-response/health-dashboards.md)
     - [CloudTrail](05-incident-and-event-response/cloudtrail.md)
     - [AWS X-Ray](05-incident-and-event-response/x-ray.md)
-    - [Health](05-incident-and-event-response/health.md)
 6. Security and Compliance
     - [Amazon Inspector](06-security-and-compliance/inspector.md)
     - [AWS Config](06-security-and-compliance/config.md)
