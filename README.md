@@ -50,10 +50,10 @@
     - [Amazon OpenSearch](04-monitoring-and-logging/opensearch.md)
     - [Amazon Athena](04-monitoring-and-logging/athena.md)
 5. Incident and Event Response
-    - [Health](05-incident-and-event-response/health.md)
-    - [CloudWatch Events](05-incident-and-event-response/eventbridge.md)
+    - [Amazon EventBridge (formerly known as CloudWatch Events)](05-incident-and-event-response/eventbridge.md)
     - [CloudTrail](05-incident-and-event-response/cloudtrail.md)
     - [AWS X-Ray](05-incident-and-event-response/x-ray.md)
+    - [Health](05-incident-and-event-response/health.md)
 6. Security and Compliance
     - [Amazon Inspector](06-security-and-compliance/inspector.md)
     - [AWS Config](06-security-and-compliance/config.md)
