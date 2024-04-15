@@ -54,7 +54,7 @@
     - [S3 Event Notifications and Object Integrity](05-incident-and-event-response/s3-event-notifications.md)
     - [AWS Health Dashboards](05-incident-and-event-response/health-dashboards.md)
     - [EC2 Status Checks](05-incident-and-event-response/ec2-status-checks.md)
-    - [CloudTrail](05-incident-and-event-response/cloudtrail.md)
+    - [AWS CloudTrail](05-incident-and-event-response/cloudtrail.md)
     - [AWS X-Ray](05-incident-and-event-response/x-ray.md)
 6. Security and Compliance
     - [Amazon Inspector](06-security-and-compliance/inspector.md)
