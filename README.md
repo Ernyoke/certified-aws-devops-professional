@@ -55,6 +55,7 @@
     - [AWS Health Dashboards](05-incident-and-event-response/health-dashboards.md)
     - [EC2 Status Checks](05-incident-and-event-response/ec2-status-checks.md)
     - [AWS CloudTrail](05-incident-and-event-response/cloudtrail.md)
+    - [SNS and SQS](05-incident-and-event-response/sns-sqs.md)
     - [AWS X-Ray](05-incident-and-event-response/x-ray.md)
 6. Security and Compliance
     - [Amazon Inspector](06-security-and-compliance/inspector.md)
