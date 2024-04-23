@@ -19,7 +19,6 @@
 
 - AWS Lambda
 - Elastic Beanstalk
-    - add x-ray config file to `.ebextensions/` folder in your code
 - ECS
 - ELB
 - API Gateway
@@ -27,7 +26,7 @@
 
 ### X-Ray Leverages Tracing
 
-- **Tracing** is an end to end way to following a "request"
+- **Tracing** is an end to end way following a "request"
 - Each component dealing with the request adds its own "trace"
 - Tracing is made of segments (+ sub segments)
 - Annotations can be added to traces to provide extra-information
@@ -52,11 +51,19 @@
     - AWS Lambda / other AWS services already run the X-Ray daemon for you
     - Each application must have the IAM rights to write data to X-Ray
 
-## X-Ray's internal magic
+## X-Ray's Internal Magic
 
 - X-Ray service collects data from all the different services
 - Service map is computed from all the segments and traces
-- X-Ray is graphical, so even non technical people can help troubleshoot
+- X-Ray is graphical, so even non-technical people can help troubleshoot
+
+## X-Ray with Elastic Beanstalk
+
+- AWS Elastic Beanstalk platforms include the X-Ray daemon
+- We can run the daemon by setting an option in the Elastic Beanstalk console or with a configuration file (in `.ebextension/xray-daemon.config`)
+- We have to make sure to give our instance profile the correct IAM permissions so that the X-Ray daemon can function correctly
+- We have to make sure our application code is instrumented with X-Ray SDK
+- Node: X-Ray daemon is not provided for Multicontainer Docker
 
 ## AWS X-Ray Troubleshooting
 
