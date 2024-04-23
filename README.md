@@ -57,6 +57,7 @@
     - [AWS CloudTrail](05-incident-and-event-response/cloudtrail.md)
     - [SNS and SQS](05-incident-and-event-response/sns-sqs.md)
     - [AWS X-Ray](05-incident-and-event-response/x-ray.md)
+    - [AWS Distro for OpenTelemetry](05-incident-and-event-response/aws-distro-for-opentelemetry.md)
 6. Security and Compliance
     - [Amazon Inspector](06-security-and-compliance/inspector.md)
     - [AWS Config](06-security-and-compliance/config.md)
