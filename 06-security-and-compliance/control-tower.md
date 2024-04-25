@@ -32,3 +32,38 @@
     - Elective:
         - Commonly used by enterprises (optional)
         - Example: disallow delete actions without MFA on S3 buckets
+
+## Landing Zones
+
+- They are automatically provisioned, secure, and compliant multi-account environments based on AWS best practices
+- A Landing Zone consists of:
+    - AWS Organization: create and manage multi-account structure
+    - Account Factory: easily configure new accounts to adhere to config and policies
+    - Organizational Units (OU): group and categorize accounts based on purpose
+    - Service Control Policies (SCPs): enforce fine-grained permissions and restrictions
+    - IAM Identity Center: centrally manage user access to accounts and services
+    - Guardrails: rules and policies to enforce security, compliance and best practices
+    - AWS Config: monitor and assess our resources' compliance with Guardrails
+
+## Account Factory Customization (AFC)
+
+- Used to automatically customize resources in new and existing accounts created through Account Factory
+- For this we can use a Custom Blueprint:
+    - It is a CloudFormation template that defines the resources and configurations we want to customize in the account
+    - It is defined in the form of a Service Catalog product
+    - Recommended to be stored in a Hub Account (don't use Management Account), which stores all the Custom Blueprints
+    - We can also use predefined blueprints created by AWS partners
+- Only one blueprint can be deployed to the account!
+- When we create new accounts with Account Factory, a new event is created in EventBridge
+- Migrate accounts to Control Tower:
+    1. We move the account into an unregistered OU which is the safe zone
+    2. We move the account into our organization
+    3. We create an IAM role which allows to manage this account
+    4. We deploy the Config Conformance Packs to this account to make sure it is compliant with our organization
+
+## Customizations for AWS Control Tower (CfCT)
+
+- It is a GitOps-style customization framework created by AWS
+- Helps us to add customizations to our Landing Zone using custom CloudFormation templates and SCPs
+- It will automatically deploy resources to new AWS accounts created using Account Factory
+- Note: CfCT is different from AFC (Account Factory Customization)
