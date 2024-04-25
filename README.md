@@ -61,6 +61,7 @@
 6. Security and Compliance
     - [AWS Config](06-security-and-compliance/config.md)
     - [AWS Organizations](06-security-and-compliance/organizations.md)
+    - [AWS Control Tower](06-security-and-compliance/control-tower.md)
     - [GuardDuty](06-security-and-compliance/guard-duty.md)
     - [Trusted Advisor](06-security-and-compliance/trusted-advisor.md)
     - [AWS Data Protection](06-security-and-compliance/data-protection.md)
