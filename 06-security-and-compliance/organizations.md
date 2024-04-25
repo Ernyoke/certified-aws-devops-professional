@@ -8,6 +8,15 @@
 - Pricing benefits from aggregated usage
 - API is available to automate AWS account creation
 
+## `OrganizationAccountAccessRole`
+
+- If we create a member account using the API from the Organizations service, the `OrganizationAccountAccessRole` will be automatically created in the member account
+- Grants full administrator permissions in the member account to the management account
+- Can be used to perform admin tasks from the management account
+- Can be assumed by IAM users in the management account
+- It is automatically added all new member accounts created with AWS Organizations
+- Must be created manually if we invite an existing account
+
 ## Multi Account Strategies
 
 - Create accounts per department, per cost center, per dev/test/prod, based on regulatory restrictions (using SCP), for better isolation, to have separate per-account service limits, isolated accounts fro logging, etc.
@@ -19,6 +28,24 @@
 ## Organization Units (OU)
 
 - It is a way to group multiple service accounts
+
+## Feature Modes
+
+- Consolidated billing features:
+    - Consolidated Billing across all accounts - single payment method
+    - Pricing benefits from aggregated usage (volume discount fec EC2, S3, etc.)
+- All Features (Default):
+    - Includes consolidated billing features and SCP
+    - Invited accounts must approve enabling all features
+    - Provides the ability to apply an SCP to prevent member accounts from leaving the org
+    - Once enabled, we cannot go back to Consolidated Billing Features only
+
+## Reserved Instances
+
+- For billing purposes, the consolidated billing feature of AWS Organizations treats all the accounts in the organization as one account
+- This means that all accounts in the organization can receive the hourly cost benefits of Reserved Instances that are purchased by any other account
+- The payer account (Management account) of an org can turn off Reserved Instance (RI) discount and Savings Plan discount sharing for any accounts in the org, including the payer account
+- To share an RI or Savings Plan discount with an account, both accounts must have sharing turned on
 
 ## Service Control Policies (SCP)
 

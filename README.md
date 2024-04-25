@@ -59,17 +59,17 @@
     - [AWS X-Ray](05-incident-and-event-response/x-ray.md)
     - [AWS Distro for OpenTelemetry](05-incident-and-event-response/aws-distro-for-opentelemetry.md)
 6. Security and Compliance
-    - [Amazon Inspector](06-security-and-compliance/inspector.md)
     - [AWS Config](06-security-and-compliance/config.md)
+    - [AWS Organizations](06-security-and-compliance/organizations.md)
     - [GuardDuty](06-security-and-compliance/guard-duty.md)
     - [Trusted Advisor](06-security-and-compliance/trusted-advisor.md)
-    - [AWS Organizations](06-security-and-compliance/organizations.md)
     - [AWS Data Protection](06-security-and-compliance/data-protection.md)
     - [EC2 Instance Compliance](06-security-and-compliance/ec2-instance-compliance.md)
     - [Cost Allocation Tags](06-security-and-compliance/cost-allocation-tags.md)
     - [Secrets and License Manager](06-security-and-compliance/manager.md)
     - [Amazon Macie](06-security-and-compliance/macie.md)
     - [Tagging Strategies](06-security-and-compliance/tagging.md)
+    - [Amazon Inspector](06-security-and-compliance/inspector.md)
 
 ## Exam Description
 
