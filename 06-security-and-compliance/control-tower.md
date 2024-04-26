@@ -67,3 +67,23 @@
 - Helps us to add customizations to our Landing Zone using custom CloudFormation templates and SCPs
 - It will automatically deploy resources to new AWS accounts created using Account Factory
 - Note: CfCT is different from AFC (Account Factory Customization)
+
+## AWS Config Integration
+
+- Control Tower uses AWS Config to implement Detective Guardrails
+- Control Tower automatically enables AWS Config in enabled regions
+- AWS Config Configuration History and snapshots are delivered to an S3 bucket in a centralized Log Archive account
+- Control Tower uses CloudFormation StackSets to create resources like Config Aggregator, CloudTrail and centralized logging
+- AWS Config Conformance Packs:
+    - They enable us to create packages of Config Compliance Rules and Remediations for easy deployment at scale
+    - We can deploy them with Control Tower to individual AWS accounts or an entire AWS Organization
+
+## Account Factory for Terraform (AFT)
+
+- Helps us provision and customize AWS accounts in Control Tower through Terraform using a deployment pipeline
+- We create an account request Terraform file which triggers the AFT workflow for account provisioning
+- Offers built-in feature options (disabled by default):
+    - AWS CloudTrail Data Events: create a Trail and enable CloudTrail Data Events
+    - AWS Enterprise Support Plan: turns on the Enterprise Support Plan
+    - Delete The AWS Default VPC: deletes the default VPCs in all AWS regions
+- The Terraform module is maintained by AWS
