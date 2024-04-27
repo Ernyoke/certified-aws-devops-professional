@@ -43,4 +43,4 @@
 
 - Supports MFA with authentication modes:
     - Every Time They Sign-in (Always-on)
-    - Only When Their Sign-in Context Changes (Context-aware): analyzes user behavior (example device, browser, location)
+    - Only When Their Sign-in Context Changes (Context-aware): analyzes user behavior (example device browser, location)

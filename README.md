@@ -64,6 +64,7 @@
     - [AWS Control Tower](06-security-and-compliance/control-tower.md)
     - [AWS Identity Center](06-security-and-compliance/identity-center.md)
     - [AWS WAF - Web Application Firewall](06-security-and-compliance/waf.md)
+    - [AWS Firewall Manager](06-security-and-compliance/firewall-manager.md)
     - [GuardDuty](06-security-and-compliance/guard-duty.md)
     - [Trusted Advisor](06-security-and-compliance/trusted-advisor.md)
     - [AWS Data Protection](06-security-and-compliance/data-protection.md)
