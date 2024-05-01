@@ -67,6 +67,8 @@
     - [AWS Network Firewall](06-security-and-compliance/network-firewall.md)
     - [AWS Firewall Manager](06-security-and-compliance/firewall-manager.md)
     - [GuardDuty](06-security-and-compliance/guard-duty.md)
+    - [Amazon Detective](06-security-and-compliance/amazon-detective.md)
+    - [Amazon Inspector](06-security-and-compliance/amazon-inspector.md)
     - [Trusted Advisor](06-security-and-compliance/trusted-advisor.md)
     - [AWS Data Protection](06-security-and-compliance/data-protection.md)
     - [EC2 Instance Compliance](06-security-and-compliance/ec2-instance-compliance.md)
@@ -74,7 +76,6 @@
     - [Secrets and License Manager](06-security-and-compliance/manager.md)
     - [Amazon Macie](06-security-and-compliance/macie.md)
     - [Tagging Strategies](06-security-and-compliance/tagging.md)
-    - [Amazon Inspector](06-security-and-compliance/inspector.md)
 
 ## Exam Description
 
