@@ -14,8 +14,12 @@
 - Keys can be encrypted with default or managed KMS Keys
 - Secrets rotation:
     - Can be enabled or disabled
-    - We can select a rotation interval (between 60 days and 1 year)
+    - We can set a rotation interval using `cron()` or `rate()` expressions
     - We have to assign a Lambda function which will rotate the secret
+Multi-Region Secrets:
+    - We can replicate secrets in multiple AWS regions
+    - Secrets Manager will keep read replicas in sync with the primary secret
+    - Read replicas can be promoted to standalone secrets
 
 ## License Manager
 

@@ -7,24 +7,20 @@
     - Security
     - Fault tolerance
     - Service limits
+    - Operational Excellence
 - It has 2 tiers:
     - Free tier
-    - Payed tier when buying support plan
+    - Business & Enterprise Support plan:
+        - For full set of check
+        - Programmatic access using AWS support API
 - Core checks and recommendations are enabled for all customers
     - We can enable weekly email notifications from the console
 - Full Trusted Advices: available for Business and Enterprise support plans
     - Provides the ability to set CloudWatch alarms when limits are reached
 
-
 ## Trusted Advisor Automation
 
-- We can use CloudWatch Events to detect and react to changes it the status of Trusted Advisor checks
-- CloudWatch can invoke one or more target when a check status changes. Targets may be:
-    - AWS Lambda
-    - Kinesis
-    - SQS
-    - CloudWatch Alarm actions
-    - SNS topics
+- We can use EventBridge to detect and react to changes it the status of Trusted Advisor checks
 - Examples of automation: [https://github.com/aws/Trusted-Advisor-Tools](https://github.com/aws/Trusted-Advisor-Tools)
 - Trusted Advisor has integration with CloudWatch Alarms in order to monitor service limits (for business and enterprise support plans)
 - Trusted Advisor refresh:
