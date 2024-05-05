@@ -75,9 +75,9 @@
     - [Cost Allocation Tags](06-security-and-compliance/cost-allocation-tags.md)
     - [Secrets and License Manager](06-security-and-compliance/manager.md)
     - [Amazon Macie](06-security-and-compliance/macie.md)
-    - [Tagging Strategies](06-security-and-compliance/tagging.md)
 7. Other Services
     - [Tagging Strategies and AWS Tag Editor](07-other-services/tagging.md)
+    - [Amazon QuickSight](07-other-services/amazon-quicksight.md)
 
 ## Exam Description
 
