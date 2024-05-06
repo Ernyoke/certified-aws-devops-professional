@@ -28,3 +28,4 @@
     - Can be done programmatically:
         - `refresh-trusted-advisor-check`
         - `describe-trusted-advisor-check-result`, `...-statuses`, `...-summaries`
+    - In case of Business, Enterprise On-Ramp, or Enterprise Support plan, Trusted Advisor automatically refreshes the checks in our account account on a weekly basis

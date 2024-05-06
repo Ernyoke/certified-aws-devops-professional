@@ -78,3 +78,21 @@
 - CloudWatch Events - Event Bus: we can send events across accounts
 - CloudFormation - StackSets
 - CloudWatch Logs: cross account log sharing with subscriptions
+
+## AWS Services that We Can Use with AWS Organizations
+
+- With AWS Organizations we can perform account management activities at scale by consolidating multiple AWS accounts into a single organization
+- We can leverage the multi-account management services available in AWS Organizations with select AWS services to perform tasks on all accounts that are members of your organization
+- **Trusted access**: we can enable a compatible AWS service to perform operations across all of the AWS accounts in our organization
+- **Delegated administrator for AWS services**: a compatible AWS service can register an AWS member account in the organization as an administrator for the organization's accounts in that service
+- Services:
+    - AWS CloudFormation Stacksets: a user in the management account or a delegated administrator account can create a stack set with service-managed permissions that deploys stack instances to accounts in our organization
+    - AWS CloudTrail: a user in a management account or delegated administrator account can create an organization trail or event data store that logs all events for all accounts in the organization
+    - AWS Config: we can get an organization-wide view of our compliance status. We can also use AWS Config API operations to manage AWS Config rules and conformance packs across all AWS accounts in your organization
+    - AWS Control Tower: we can set up a landing zone, a multi-account environment for all of your AWS resources
+    - Amazon EventBridge: we can enable sharing of all Amazon EventBridge events, formerly Amazon CloudWatch Events, across all accounts in your organization
+    - AWS Firewall Manager: we can centrally configure and manage AWS WAF rules across the accounts in your organization
+    - Amazon GuardDuty: we can designate a member account to view and manage GuardDuty for all of the accounts in your organization
+    - AWS IAM Identity Center: users can sign in to the AWS access portal with their corporate credentials and access resources in their assigned management account or member accounts
+    - AWS Trusted Advisor: run Trusted Advisor checks for all of the AWS accounts in your organization
+    - etc.

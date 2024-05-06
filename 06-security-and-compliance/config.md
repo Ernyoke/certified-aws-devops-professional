@@ -75,7 +75,7 @@
 ## Conformance Pack
 
 - A conformance pack is a collection of AWS Config Rules and Remediation Actions
-- Packs are crated in YAML files
+- Packs are created using YAML files
 - They are deployed to an AWS account and region or across an AWS Organization
 - We can use pre-built packs or create our won Custom Conformance Packs
 - Custom Conformance Packs can have custom rules backed by Lambda Functions
@@ -85,12 +85,12 @@
 
 - They are AWS Config Rules that we can manage across all accounts within an AWS Organization
 
-|                  | Organizational Rules                                                                   | Conformance Packs             |
-|------------------|----------------------------------------------------------------------------------------|-------------------------------|
-| Scope            | AWS Organization                                                                       | AWS Accounts and Organization |
+|                  | Organizational Rules                                                                   | Conformance Packs                                                                          |
+|------------------|----------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------|
+| Scope            | AWS Organization                                                                       | AWS Accounts and Organization                                                              |
 | Evaluation Type  | Evaluate resources against predefined rules that are defined and enforced at Org level | Evaluate resources against predefined rules that are defined and enforced at Account level |
-| Rules Count      | One rule                                                                               | Many Rules at a time          |
-| Compliance Level | Managed at Organization level                                                          | Managed at account level      |
+| Rules Count      | One rule                                                                               | Many Rules at a time                                                                       |
+| Compliance Level | Managed at Organization level                                                          | Managed at account level                                                                   |
 
 ## CloudWatch vs CloudTrail vs Config
 
