@@ -78,6 +78,8 @@
 7. Other Services
     - [Tagging Strategies and AWS Tag Editor](07-other-services/tagging.md)
     - [Amazon QuickSight](07-other-services/amazon-quicksight.md)
+    - [AWS App2Container - A2C](07-other-services/aws-a2c.md)
+    - [AWS Copilot](07-other-services/aws-copilot.md)
 
 ## Exam Description
 
