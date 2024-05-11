@@ -44,6 +44,7 @@
     - [NAT Gateways](03-resilient-cloud-solutions/nat.md)
     - [Resilient Architectures](03-resilient-cloud-solutions/resilient-architectures.md)
     - [Disaster Recovery](03-resilient-cloud-solutions/disaster-recovery.md)
+    - [Amazon Data Lifecycle Manager](03-resilient-cloud-solutions/amazon-data-lifecycle-manager.md)
 4. Monitoring and Logging
     - [CloudWatch](04-monitoring-and-logging/cloudwatch.md)
     - [Amazon Lookout for Metrics](04-monitoring-and-logging/lookout.md)

@@ -72,7 +72,6 @@
 
 ![EB Deployment Summary](images/deployment-summary.png)
 
-
 ## Elastic Beanstalk Lifecycle Policy
 
 - Elastic Beanstalk can store at most 1000 application versions
@@ -145,7 +144,7 @@
 
 ## Elastic Beanstalk and HTTPS
 
-- SSL certificate can be loaded from the console (EB console, load balancer configuration) or from the config .ebextensions/securelistener-alb.config
+- SSL certificate can be loaded from the console (EB console, load balancer configuration) or from the `config .ebextensions`/`securelistener-alb.config`
 - SSL certificates can be provisioned using  ACM (AWS Certificate Manager) or CLI
 - Must configure SG with allowing port 443
 - Redirect HTTP to HTTPS:

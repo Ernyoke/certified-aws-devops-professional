@@ -24,7 +24,9 @@
     - Start Step Function
     - Send a message to SNS, SQS, Kinesis Data Streams
     - Start an SSM Automation
+    - EC2 API Call (Reboot, Stop, Terminate)
     - etc.
+    - **Note: S3 bucket cannot be a destination!**
 
 ## Event Buses
 

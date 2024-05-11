@@ -368,7 +368,7 @@
 
 ## DynamoDB Global Tables
 
-- Enable cross-region replication of a DynamoDB table
+- Enable cross-region replication of a DynamoDB table (has to be done manually on an already existing table)
 - Require DynamoDB Streams to be enabled in order to work
 - Multi-region replication is **Active-Active** => applications can READ and WRITE in any region to the table
 - Data replication is eventually consistent
