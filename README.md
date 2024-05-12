@@ -81,6 +81,7 @@
     - [Amazon QuickSight](07-other-services/amazon-quicksight.md)
     - [AWS App2Container - A2C](07-other-services/aws-a2c.md)
     - [AWS Copilot](07-other-services/aws-copilot.md)
+    - [Amazon CloudFront](07-other-services/cloudfront.md)
 
 ## Exam Description
 
